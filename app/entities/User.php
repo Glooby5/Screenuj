@@ -13,6 +13,12 @@ class User extends \Kdyby\Doctrine\Entities\BaseEntity
     
     /**
      * @var string
+     * @ORM\Column(type="string")
+     */
+    public $name;
+    
+    /**
+     * @var string
      * @ORM\Column(type="string", unique=true)
      */
     public $email;
@@ -25,7 +31,7 @@ class User extends \Kdyby\Doctrine\Entities\BaseEntity
     
     /**
      * @var datetime
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime") 
      */
     public $registred;
 }
