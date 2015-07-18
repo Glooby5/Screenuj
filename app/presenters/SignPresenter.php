@@ -11,8 +11,6 @@ use Nette,
  */
 class SignPresenter extends BasePresenter
 {
-	/** @var SignFormFactory @inject */
-	public $factory;
 
 
 	/**
