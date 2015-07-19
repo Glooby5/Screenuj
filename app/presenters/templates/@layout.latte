@@ -6,25 +6,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
+    <meta charset="utf-8">
 
-	<title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
+    <title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
-	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
-	<meta name="viewport" content="width=device-width">
-	{block head}{/block}
+    <link rel="stylesheet" href="{$basePath}/css/style.css">
+    <link rel="shortcut icon" href="{$basePath}/favicon.ico">
+    <meta name="viewport" content="width=device-width">
+    {block head}{/block}
+    {block scripts}
+        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="{$basePath}/js/fb.js"></script>
+        <script src="{$basePath}/js/nette.ajax.js"></script>
+    {/block}
 </head>
 
 <body>
-	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
 
-	{include content}
+    <div id="status">
+    </div>
 
-	{block scripts}
-	<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
-	<script src="//nette.github.io/resources/js/netteForms.min.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
-	{/block}
+<script type="text/javascript">
+    $(document).on('click', '#login', function (event) {
+    $.nette.ajax({
+            type: 'GET',
+            url: {link Login: 'do' => 'facebook'},
+            data: {
+                fbId: 54646,
+                name: "glooby5",
+                email: "kaderabek.jan@gmail.com"
+            }
+        }).done(function (payload) {
+            
+        });
+    });
+</script>
+    <a href="#" id="login">Login</a>
+    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+    {include content}	
 </body>
 </html>

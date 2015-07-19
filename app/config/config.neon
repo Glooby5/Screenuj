@@ -22,6 +22,7 @@ session:
 services:
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
+	- Screenuj\Services\UserService
 
 extensions:
     console: Kdyby\Console\DI\ConsoleExtension
