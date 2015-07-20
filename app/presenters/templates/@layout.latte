@@ -17,7 +17,7 @@
     {block scripts}
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script type="text/javascript">
-            var fbLink = {link Login: 'do' => 'facebook'};
+            var fbLink = {link Sign: 'do' => 'facebook'};
         </script>
         <script src="{$basePath}/js/fb.js"></script>
         <script src="{$basePath}/js/nette.ajax.js"></script>
@@ -25,14 +25,25 @@
 </head>
 
 <body>
-    <fb:login-button scope="email, public_profile"  onlogin="checkLoginState();">
-    </fb:login-button>
+        <script>
+        $(function () {
+    $.nette.init();
+});
+        </script>
+    {snippet loginSnippet}
+        {if $user->loggedIn}
+            <a href="{link Sign: 'do' => 'out'}" class="ajax">Odhlásit se</a>
+        {else}            
+            <a href="#" id="fb-login" class="button fb login">Přihlásit se</a>
+        {/if}
+    {/snippet}
 
     <div id="status">
     </div>
 
-    <input type="button" value="Login" onclick="Login();" />
-    <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    {snippet flashes}
+        <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+    {/snippet}
 
     {include content}	
 </body>
