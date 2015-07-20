@@ -30,7 +30,7 @@ class LoginPresenter extends BasePresenter
             
             if (!$user) //Neexistuje uživatel se stejným emailem
             {
-                $user = new Entities\User("jmeno", $email, $fbId);
+                $user = new Entities\User($name, $email, $fbId);
                 $this->userService->save($user);    
                 
             } 
@@ -39,8 +39,9 @@ class LoginPresenter extends BasePresenter
                 /** @todo Sloučit účty */
             }
         }
-        
-        $identity = new \Nette\Security\Identity(4, '', ['type' => 'Facebook', 'signed' => new \DateTime()]);
+        $data = ['email' => $user->email, 'name' => $user->name, 'type' => 'Facebook', 'signed' => new \DateTime()];
+            
+        $identity = new \Nette\Security\Identity($user->id, NULL, $data);
         $this->user->login($identity);
         $this->sendPayload();
     }
