@@ -23,6 +23,7 @@ services:
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
 	- Screenuj\Services\UserService
+	imageStorage: Screenuj\Model\ImageStorage(%wwwDir%/uploads/images)
 
 extensions:
     console: Kdyby\Console\DI\ConsoleExtension
