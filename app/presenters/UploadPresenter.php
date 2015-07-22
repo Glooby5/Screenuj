@@ -2,16 +2,21 @@
 namespace App\Presenters;
 
 use Screenuj\Model\ImageStorage;
+use Screenuj\Services\UserService;
 
 class UploadPresenter extends BasePresenter
 {    
-    /** @var type ImageStorage */
+    /** @var ImageStorage */
     public $storage;
     
-    public function __construct(ImageStorage $storage)
+    /** @var UserService */
+    public $userService;
+    
+    public function __construct(ImageStorage $storage, UserService $userService)
     {
         parent::__construct();
         $this->storage = $storage;
+        $this->userService = $userService;
     }
     
     public function actionSave()
@@ -21,9 +26,10 @@ class UploadPresenter extends BasePresenter
         if ($filename) {
             $data = file_get_contents('php://input');
 
-            $user = $this->user->isLoggedIn() ? $this->user->id : "public";
+            $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
+            $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
             
-            $this->storage->save($filename, $data, $user);
+            $this->storage->save($filename, $data, $type, $user);
                 echo "$filename uploaded";
                 exit();
 
