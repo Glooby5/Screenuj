@@ -20,21 +20,21 @@ class UploadPresenter extends BasePresenter
     }
     
     public function actionSave()
-    {        
-        $filename = (isset($_SERVER['HTTP_X_FILENAME']) ? $_SERVER['HTTP_X_FILENAME'] : false);
-
-        if ($filename) {
-            $data = file_get_contents('php://input');
-
+    {                
+        if (isset($_FILES["image"])) 
+        {
+            $image = $_FILES["image"];
+            if (isset($image["error"])) 
+            {
+                $this->sendResponse(new \Nette\Application\Responses\JsonResponse(['type' => 'error', 'message' => $image["error"]]));
+            }
+            
             $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
             $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
             
-            $this->storage->save($filename, $data, $type, $user);
-                echo "$filename uploaded";
-                exit();
-
+            $this->storage->save($image, $type, $user);
         }
         
         $this->sendPayload(); 
-    }    
+    }
 }
