@@ -73,7 +73,7 @@ class ImageStorage extends Object
         $name = md5($filename . $user->email . time()) .'.jpg';;
         $newFileName = $this->dir . $dir .'/'. $name;
         
-        $image->save($newFileName, 80, Image::JPEG);
+        $image->save($newFileName, 100, Image::JPEG);
         
         $image->resize(300, NULL);
         $thumbFileName = $this->dir . $dir . '/thumbs/'. $name;

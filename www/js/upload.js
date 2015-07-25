@@ -83,12 +83,16 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
     // upload JPEG files
     function UploadFile(file) {
-
+        console.log("uploaduju");
+        console.log(file.type);
         // following line is not necessary: prevents running on SitePoint servers
         if (location.host.indexOf("sitepointstatic") >= 0) return
 
         var xhr = new XMLHttpRequest();
-        if (xhr.upload && file.type == "image/jpeg" && file.size <= $id("MAX_FILE_SIZE").value) {
+        
+        var types = ["image/png", "image/jpeg"]
+        
+        if (xhr.upload && types.indexOf(file.type) != -1 && file.size <= $id("MAX_FILE_SIZE").value) {
 
             // create progress bar
             var o = $id("progress");
@@ -122,7 +126,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
     function Init() {
 
         var filedrag = $id("upload-area");
-        console.log("a" + filedrag);
+
         // is XHR2 available?
         var xhr = new XMLHttpRequest();
         if (xhr.upload) {
@@ -138,6 +142,18 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
     if (window.File && window.FileList && window.FileReader) {
         Init();
     }
+
+    $(document).ready(function() {
+        window.addEventListener("paste", pasteEvent);
+    });
+    
+
+    function pasteEvent(e) {
+        console.log("vloženo");
+        var item = e.clipboardData.items[0];
+        UploadFile(item.getAsFile());
+    }
+    
 
 
 })();

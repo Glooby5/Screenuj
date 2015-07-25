@@ -37,10 +37,9 @@ class Image extends \Kdyby\Doctrine\Entities\BaseEntity
     public $user;
     
     /**
-     * 
      * @param string $name
      * @param string $folder
-     * @param Screenuj/Entities/User $user
+     * @param User $user
      */
     public function __construct($name, $folder, $user)
     {
