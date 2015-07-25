@@ -4,7 +4,7 @@
         data.append('image', file);
         
         $.ajax({
-            url: uploadHandle,
+            url: uploadLink,
             type: "POST",
             data: data,
             processData: false,

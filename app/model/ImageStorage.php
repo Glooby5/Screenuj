@@ -65,12 +65,12 @@ class ImageStorage extends Object
         return $dir;
     }
 
-    public function save($filename, $data, $type, User $user)
+    public function save($file, $type, User $user)
     {
-        $image = Image::fromString($data);
+        $image = Image::fromFile($file["tmp_name"]);
         
         $dir = $this->testFolder($type, $user->id);
-        $name = md5($filename . $user->email . time()) .'.jpg';;
+        $name = md5($file["name"] . $user->email . time()) .'.jpg';;
         $newFileName = $this->dir . $dir .'/'. $name;
         
         $image->save($newFileName, 100, Image::JPEG);

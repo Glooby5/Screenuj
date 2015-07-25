@@ -24,10 +24,10 @@ class UploadPresenter extends BasePresenter
         if (isset($_FILES["image"])) 
         {
             $image = $_FILES["image"];
-            if (isset($image["error"])) 
+            if ($image["error"] > 0) 
             {
                 $this->sendResponse(new \Nette\Application\Responses\JsonResponse(['type' => 'error', 'message' => $image["error"]]));
-            }
+            }            
             
             $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
             $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
