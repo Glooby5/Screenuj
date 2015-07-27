@@ -1,6 +1,7 @@
 <?php
 namespace App\Presenters;
 
+use Nette\Application\Responses\JsonResponse;
 use Screenuj\Model\ImageStorage;
 use Screenuj\Services\UserService;
 
@@ -20,21 +21,21 @@ class UploadPresenter extends BasePresenter
     }
     
     public function actionSave()
-    {                
-        if (isset($_FILES["image"])) 
-        {
-            $image = $_FILES["image"];
-            if ($image["error"] > 0) 
-            {
-                $this->sendResponse(new \Nette\Application\Responses\JsonResponse(['type' => 'error', 'message' => $image["error"]]));
-            }            
-            
-            $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
-            $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
-            
-            $this->storage->save($image, $type, $user);
-        }
+    {
+        $filename = (isset($_SERVER['HTTP_X_FILENAME']) ? $_SERVER['HTTP_X_FILENAME'] : false);
+
+        if (!$filename)
+            $this->sendResponse(new JsonResponse(['state' => 'error', 'type' => 'nofile']));
         
-        $this->sendPayload(); 
+        $data = file_get_contents('php://input');
+        
+        $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
+        $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
+            
+        $code = $this->storage->save($filename, $data, $type, $user);
+        
+        $this->sendResponse(new JsonResponse(['state' => 'success', 'code' => $code]));
+        
+        die();         
     }
 }

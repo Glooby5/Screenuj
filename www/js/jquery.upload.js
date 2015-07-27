@@ -1,20 +1,59 @@
 (function() {
-    function UploadFile(file) {
-        data = new FormData();
-        data.append('image', file);
+    function checkFile(file) {
+        if (file.size > 10485760) {
+            console.log("moc MB")
+            return false;
+        }
         
-        $.ajax({
-            url: uploadLink,
-            type: "POST",
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (res) {
-                console.log(res);
+        var types = ["image/png", "image/jpeg"];        
+        if (types.indexOf(file.type) === -1) {
+            console.log("není to obrázek");
+            return false;;
+        }
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = new Image();
+            img.src = e.target.result;
+            var size = img.width * img.width * 3 * 1.6;
+            
+            if (size < 120000000) {
+                console.log("moc px");
+                return false;
+            } else {
+                return true;
             }
-        });
-        
+        }
+        reader.readAsDataURL(file);
     }
+    
+    function UploadFile(file) {
+        if (!checkFile(file)) return;
+        
+        var xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener("progress", function(e) {
+            if (e.lengthComputable) {
+                var percentComplete = e.loaded / e.total * 100;
+                console.log(percentComplete);
+                $("#progress progress").attr('value', percentComplete);
+            }
+        }, false);
+
+        xhr.onreadystatechange = function(e) {
+            if (xhr.readyState === 4) {
+                console.log(xhr.status == 200 ? "success" : "failure");
+            }
+        };
+
+        xhr.open("POST", uploadLink, true);
+        xhr.setRequestHeader("X_FILENAME", file.name);
+
+        $("#progress").append('<progress value="0" max="100"></progress>');
+
+        xhr.send(file);
+    }    
+    
     function FileDragHover(e) {
         e.stopPropagation();
         e.preventDefault();        
@@ -25,25 +64,18 @@
         FileDragHover(e);
 
         var files = e.originalEvent.dataTransfer.files;
+        UploadFile(files[0]);
     }
     
     function PasteEvent(e) {
-        //console.log(e.originalEvent.clipboardData.items[0].getAsFile());
         var item = e.originalEvent.clipboardData.items[0];
         UploadFile(item.getAsFile());
     }
 
     $(document).ready(function() {
-        //window.addEventListener("paste", pasteEvent);
         $(window).on("paste", PasteEvent);
         $("#upload-area").on("dragover", FileDragHover);
         $("#upload-area").on("dragleave", FileDragHover);
         $("#upload-area").on("drop", FileSelectHandler);
     });
-    
-
-    
-    
-
-
 })();

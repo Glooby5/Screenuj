@@ -64,13 +64,20 @@ class ImageStorage extends Object
         
         return $dir;
     }
-
-    public function save($file, $type, User $user)
+    
+    /**
+     * Zpracuje přijatý obrázek
+     * @param string $filename
+     * @param mixed $data
+     * @param int $type
+     * @param User $user
+     */
+    public function Save($filename, $data, $type, User $user)
     {
-        $image = Image::fromFile($file["tmp_name"]);
-        
+        $image = Image::fromString($data);
+
         $dir = $this->testFolder($type, $user->id);
-        $name = md5($file["name"] . $user->email . time()) .'.jpg';;
+        $name = md5($filename . $user->email . time()) .'.jpg';;
         $newFileName = $this->dir . $dir .'/'. $name;
         
         $image->save($newFileName, 100, Image::JPEG);
@@ -84,5 +91,6 @@ class ImageStorage extends Object
         $this->imageService->save($imageRecord);
         
         /** @todo Vytvořit link */
+        return "XglFe";
     }
 }
