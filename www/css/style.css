@@ -55,21 +55,35 @@ body {
 }
 
 #upload-area.hover {
-    color: #f00;
-    border-color: #f00;
+    border-color: #4ABEF9;
     border-style: solid;
-    box-shadow: inset 0 3px 4px #888;
+    box-shadow: 10px 10px 100px 10px #888 inset;    
 }
 
 #upload-area p {
     margin-top: 30%;
     font-size: 2em;
+    pointer-events: none;
 }
 
-progress[value] {
-    width: 250px;
-    height: 20px;
+#progress-div {
+    border: #4ABEF9 1px solid;
+    margin: 15px 0px;
+
+    text-align:center;
 }
+
+#progress-bar {
+    background-color: #4ABEF9;
+    height:10px;
+    color: #FFFFFF;
+    width:20%;
+    -webkit-transition: width .3s;
+    -moz-transition: width .3s;
+    transition: width .3s;
+}
+
+
 
 .btn.auth,
 .btn.auth:visited {

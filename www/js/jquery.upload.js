@@ -22,6 +22,7 @@
                 var percentComplete = e.loaded / e.total * 100;
                 console.log(percentComplete);
                 $("#progress progress").attr('value', percentComplete);
+                $("#progress-bar").width(percentComplete + '%');
             }
         }, false);
 
@@ -39,7 +40,7 @@
         xhr.open("POST", uploadLink, true);
         xhr.setRequestHeader("X_FILENAME", file.name);
 
-        $("#progress").html('<progress value="0" max="100"></progress>');
+        $("#progress-container").html('<div id="progress-div"><div id="progress-bar"></div></div>');
 
         xhr.send(file);
     }
