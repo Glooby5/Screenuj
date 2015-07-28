@@ -20,43 +20,33 @@
 </head>
 
 <body>
-    
-    
-
-    
-<nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#">Screenuj</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    
-  
-            {snippet loginSnippet}
-                {if $user->loggedIn}
-                    <a href="{link Sign: 'do' => 'out'}" class="ajax">Odhlásit se</a>
-                {else}            
-                    <a href="#" id="fb-login" class="button fb login">Přihlásit se</a>
-                {/if}
-            {/snippet}
-
-            <div id="status">
+    <div id="top">
+        <header>
+            <div class="title">
+                <h1>Screenuj.eu</h1>
             </div>
+            <div class="login-container">
+                {snippet loginSnippet}
+                    {if $user->loggedIn}
+                        <a href="{link Sign: 'do' => 'out'}" class="ajax">Odhlásit se</a>
+                    {else}            
+                        <a href="#" id="fb-login" class="btn auth facebook">Přihlásit se</a>
+                    {/if}
+                {/snippet}
+            </div>
+        </header>
+    </div>
+    <div id="main">    
+        <div id="status">
+        </div>
 
-            {snippet flashes}
-                <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
-            {/snippet}
+        {snippet flashes}
+            <div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+        {/snippet}
 
-            {include content}	
-            
+        {include content}	
+    </div>
+    
     {block scripts}
         <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
         <script type="text/javascript">

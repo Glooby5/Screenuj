@@ -1,13 +1,57 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald);
+@import url(http://fonts.googleapis.com/css?family=Teko);
+
 body {
-  padding-top: 50px;
-  padding-bottom: 20px;
+    font-family: 'Lato', sans-serif;
+    margin: 0;
+    background: url('/../www/images/white_wall_hash.png');
+}
+
+#main {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+#top {
+    background-color: black;
+    height: 60px;
+    border-bottom: 3px solid #4ABEF9;
+}
+
+#top header {
+    margin: 0 auto;
+    width: 1000px;
+    font-family: 'Teko', sans-serif;
+    font-size: 25px;
+    text-transform: uppercase;
+    padding-top: 10px;
+}
+
+#top h1 {
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+#top .title {
+    display: inline-block;
+    line-height: 45px;
+}
+
+#top .login-container {
+    float: right;
+    margin-top: 2px;
+}
+
+.main.container {
+    margin-top: 20px;
 }
 
 #upload-area {
-    border: 2px dashed #555;
-    border-radius: 7px;
     text-align: center;
-    height: 500px;
+    height: 700px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 3px dashed #4ABEF9;
 }
 
 #upload-area.hover {
@@ -17,7 +61,75 @@ body {
     box-shadow: inset 0 3px 4px #888;
 }
 
+#upload-area p {
+    margin-top: 30%;
+    font-size: 2em;
+}
+
 progress[value] {
     width: 250px;
     height: 20px;
+}
+
+.btn.auth,
+.btn.auth:visited {
+    position: relative;
+    display: inline-block;
+    /* padding: 7px 10px 3px 0px; */
+    background: #3b5998;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn.auth:hover,
+.btn.auth:focus,
+.btn.auth:active {
+    color: #222;
+    text-decoration: none;
+}
+
+.btn.auth:before {
+    float: left;
+    
+}
+
+.btn.auth::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+
+/* Facebook (extends .btn-auth)
+   ========================================================================== */
+
+.btn.facebook,
+.btn.facebook:visited {
+    background: #3b5998;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+
+.btn.facebook:hover,
+.btn.facebook:focus {
+    color: #fff;
+    background-color: #3b5998;
+    
+}
+
+.btn.facebook:active {
+    background: #354f88;
+}
+
+/** Icon */
+.btn.facebook:before {
+    margin-top: -5px;
+    margin-right: 10px;
+    background-color: #354f88;
+    padding: 5px 0px 2px 0px;
+    width: 35px;
+    content: url(https://dl.dropboxusercontent.com/u/54149043/CssDeck/fb-icon.png);    
 }

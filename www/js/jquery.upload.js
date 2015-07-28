@@ -8,28 +8,13 @@
         var types = ["image/png", "image/jpeg"];        
         if (types.indexOf(file.type) === -1) {
             console.log("není to obrázek");
-            return false;;
-        }
-        
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var img = new Image();
-            img.src = e.target.result;
-            var size = img.width * img.width * 3 * 1.6;
-            
-            if (size < 120000000) {
-                console.log("moc px");
-                return false;
-            } else {
-                return true;
-            }
-        }
-        reader.readAsDataURL(file);
+            return false;
+        }        
+        return true;
     }
     
-    function UploadFile(file) {
-        if (!checkFile(file)) return;
-        
+    function sendFile(file) {
+        console.log("send file");
         var xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener("progress", function(e) {
@@ -43,15 +28,39 @@
         xhr.onreadystatechange = function(e) {
             if (xhr.readyState === 4) {
                 console.log(xhr.status == 200 ? "success" : "failure");
+                var response = $.parseJSON(xhr.responseText);
+                if (response.state == "success") {
+                    $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">');
+                    //$("#result-input").focus();
+                }
             }
         };
 
         xhr.open("POST", uploadLink, true);
         xhr.setRequestHeader("X_FILENAME", file.name);
 
-        $("#progress").append('<progress value="0" max="100"></progress>');
+        $("#progress").html('<progress value="0" max="100"></progress>');
 
         xhr.send(file);
+    }
+    
+    function UploadFile(file) {
+        if (checkFile(file)) {
+            console.log("check file");
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.src = e.target.result;
+                var size = img.width * img.width * 3 * 1.6;
+
+                if (size > 120000000) {
+                    console.log("moc px");
+                } else {
+                    sendFile(file);
+                }
+            }            
+            reader.readAsDataURL(file);
+        }
     }    
     
     function FileDragHover(e) {

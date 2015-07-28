@@ -39,9 +39,9 @@ class Link extends \Kdyby\Doctrine\Entities\BaseEntity
     
     /**
      * @var User
-     * @ORM\ManyToOne(targetEntity="User", nullable=true)
+     * @ORM\ManyToOne(targetEntity="User")
      */
-    public $user;
+    public $user = null;
     
     /**
      * @param string $code
