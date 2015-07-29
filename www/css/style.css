@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Oswald);
+@import url(http://fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext);
 @import url(http://fonts.googleapis.com/css?family=Teko);
 
 body {
@@ -44,7 +44,18 @@ body {
 }
 
 .main.container {
-    margin-top: 20px;
+    margin-top: 15px;
+}
+
+#result {
+    text-align: center;
+}
+
+#result input {
+    font-size: 1.5em;
+    border: 2px solid #4ABEF9;
+    text-align: center;
+    width: 400px;
 }
 
 #upload-area {
@@ -52,6 +63,7 @@ body {
     height: 700px;
     background: rgba(0, 0, 0, 0.1);
     border: 3px dashed #4ABEF9;
+    margin-top: 15px;
 }
 
 #upload-area.hover {

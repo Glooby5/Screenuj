@@ -31,7 +31,7 @@
                 console.log(xhr.status == 200 ? "success" : "failure");
                 var response = $.parseJSON(xhr.responseText);
                 if (response.state == "success") {
-                    $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">');
+                    $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
                     //$("#result-input").focus();
                 }
             }
