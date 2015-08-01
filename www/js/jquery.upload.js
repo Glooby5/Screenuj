@@ -13,6 +13,91 @@
         return true;
     }
     
+    function initEdit () {
+	// The pencil tool instance
+	tool = new tool_pencil();
+        console.log("init");
+	// Attach the mousedown, mousemove and mouseup event listeners
+	$("#imageView").on('mousedown', ev_canvas);
+	$("#imageView").on('mousemove', ev_canvas);
+	$("#imageView").on('mouseup', ev_canvas);
+    }
+    
+    function tool_pencil () {
+	var tool = this;
+	this.started = false;
+
+	// This is called when you start holding down the mouse button
+	// This starts the pencil drawing
+	this.mousedown = function (ev) {
+			context.beginPath();
+			context.moveTo(ev._x, ev._y);
+			tool.started = true;
+	};
+
+	// This function is called every time you move the mouse. Obviously, it only
+	// draws if the tool.started state is set to true (when you are holding down
+	// the mouse button)
+	this.mousemove = function (ev) {
+		if (tool.started) {
+			context.lineTo(ev._x, ev._y);
+			context.stroke();
+		}
+	};
+
+	// This is called when you release the mouse button
+	this.mouseup = function (ev) {
+		if (tool.started) {
+			tool.mousemove(ev);
+			tool.started = false;
+		}
+	};
+    }
+
+    // The general-purpose event handler. This function just determines
+    // the mouse position relative to the <canvas> element
+    function ev_canvas (ev) {
+        // Firefox
+        console.log("ev_canvas");
+        if (ev.layerX || ev.layerX == 0) {
+                ev._x = ev.layerX;
+                ev._y = ev.layerY;
+        // Opera
+        } else if (ev.offsetX || ev.offsetX == 0) {
+                ev._x = ev.offsetX;
+                ev._y = ev.offsetY;
+        }
+
+        // Call the event handler of the tool
+        var func = tool[ev.type];
+        if (func) {
+                func(ev);
+        }
+    }
+    
+    var context;
+    
+    function ShowImage(file) {
+        $("#edit-container").html('<canvas id="imageView" width="400" height="300"></canvas>');
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var canvas = document.getElementById('imageView');
+            context = canvas.getContext('2d');
+            console.log(context);
+            var img = new Image();
+            
+            img.onload = function() {
+                context.drawImage(img, 0, 0);
+                initEdit();
+            }
+            
+            img.src = e.target.result;
+        }  
+        reader.readAsDataURL(file);
+    }
+    
+    
     function sendFile(file) {
         console.log("send file");
         var xhr = new XMLHttpRequest();
@@ -33,6 +118,7 @@
                 if (response.state == "success") {
                     $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
                     //$("#result-input").focus();
+                    ShowImage(file);
                 }
             }
         };
