@@ -38,6 +38,12 @@ body {
     line-height: 45px;
 }
 
+#top .title a {
+    text-decoration: none;
+    color: white;
+    
+}
+
 #top .login-container {
     float: right;
     margin-top: 2px;
@@ -158,4 +164,9 @@ body {
     padding: 5px 0px 2px 0px;
     width: 35px;
     content: url(https://dl.dropboxusercontent.com/u/54149043/CssDeck/fb-icon.png);    
+}
+
+.btn.logout {
+    color: #bf5c5c;
+    text-decoration: none;
 }
