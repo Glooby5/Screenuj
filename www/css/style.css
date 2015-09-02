@@ -84,6 +84,11 @@ body {
     pointer-events: none;
 }
 
+#progress-container {
+    margin: auto;
+}
+
+
 #progress-div {
     border: #4ABEF9 1px solid;
     margin: 15px 0px;
@@ -101,7 +106,20 @@ body {
     transition: width .3s;
 }
 
+#edit-container {
+    margin: auto;
+    margin-top: 20px;
+}
 
+#image-view {
+    
+    margin-top: 20px;
+}
+
+#image-view img {
+    max-width: 1000px;
+    border: 1px solid black;
+}
 
 .btn.auth,
 .btn.auth:visited {

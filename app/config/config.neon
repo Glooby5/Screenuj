@@ -22,7 +22,7 @@ session:
 services:
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
-	imageStorage: Screenuj\Model\ImageStorage(%wwwDir%/uploads/images)
+	imageStorage: Screenuj\Model\ImageStorage(%wwwDir%/uploads/images, /www/uploads/images)
 	- Screenuj\Model\HashManager
 	- Screenuj\Services\ImageService
 	- Screenuj\Services\UserService

@@ -3,6 +3,7 @@ namespace Screenuj\Entities;
 
 use Doctrine\ORM\Mapping  as ORM;
 use Screenuj\Entities\User;
+use Screenuj\Entities\Image;
 
 /**
  * @author Jan Kadeřábek <kaderabek.jan@gmail.com>
@@ -35,6 +36,12 @@ class Image extends \Kdyby\Doctrine\Entities\BaseEntity
      * @ORM\ManyToOne(targetEntity="User")
      */
     public $user;
+    
+    /**
+     * @var Link
+     * @ORM\OneToMany(targetEntity="Link", mappedBy="image")
+     */
+    public $link;
     
     /**
      * @param string $name

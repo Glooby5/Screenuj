@@ -15,6 +15,7 @@ class ImageStorage extends Object
     const PRIVATE_IMG = 1;
     
     private $dir;
+    private $folder;
     
     /** @var ImageService */
     private $imageService;
@@ -22,9 +23,10 @@ class ImageStorage extends Object
     /** @var LinkService */
     private $linkService;
 
-    public function __construct($dir, ImageService $imageService, LinkService $linkService)
+    public function __construct($dir, $folder, ImageService $imageService, LinkService $linkService)
     {
         $this->dir = $dir;
+        $this->folder = $folder;
         
         if (!is_dir($dir)) {
             umask(0);
@@ -41,7 +43,7 @@ class ImageStorage extends Object
         
         if ($type == ImageStorage::PUBLIC_IMG) {
             $dir = '/public';
-            if (!is_dir($this->dir . $dir)) mkdir($$this->dir . dir, 0777);            
+            if (!is_dir($this->dir . $dir)) mkdir($this->dir . $dir, 0777);            
             
             $dir .= '/'. date('Y');
             if (!is_dir($this->dir . $dir)) mkdir($this->dir . $dir, 0777);
@@ -97,5 +99,13 @@ class ImageStorage extends Object
         $this->imageService->save($imageRecord);
         
         return $this->linkService->create($imageRecord);
+    }
+    
+    public function LoadImage(Image2 $image)
+    {
+        $url = $this->dir . $image->folder . '/' . $image->name;
+
+        return $this->folder . $image->folder . '/' . $image->name;
+
     }
 }

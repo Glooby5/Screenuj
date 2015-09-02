@@ -272,6 +272,7 @@
     
     function ShowImage(file) {
         //$("#upload-area").hide();
+        $("#upload-area").attr("id", "edit-container");
         $("#edit-container").html('<canvas id="imageView" width="1000"  height="700"><p>hovnoooooooooooooooooooooo</p>');
         
         var reader = new FileReader();
@@ -296,7 +297,9 @@
                             0, 0, canvas.width, canvas.height);  // destination rectangle
                 }
 
-
+                $("#edit-container").css('width', canvas.width);
+                $("#edit-container").css('height', canvas.height);
+                $("#progress-container").css('width', canvas.width);
 
                 initEdit();
             }
@@ -327,6 +330,7 @@
                 if (response.state == "success") {
                     $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
                     //$("#result-input").focus();
+                    $("#progress-container").fadeOut();
                     ShowImage(file);
                 }
             }

@@ -17,4 +17,20 @@ class ImageService extends BaseService
     {
         return Image::getClassName();
     }
+    
+    public function getByCode($code)
+    {
+        $query = $this->getEm()->createQueryBuilder()
+                ->select(['i'])
+                ->from(Image::getClassName(), 'i')
+                ->leftJoin('i.link', 'l')
+                ->andWhere('l.code = :code')
+                ->setParameter('code', $code);
+        
+        
+        $query = $query->getQuery();
+        $result = $query->getResult();
+       
+        return $result;
+    }
 }
