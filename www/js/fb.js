@@ -39,6 +39,12 @@ function FbLogin(id, name, email) {
             email: email
         }
     }).done(function (payload) {
-
+        swal({
+            title: "Přihlášen!",
+            text: "Přihlášení proběhlo úspěšně.",
+            timer: 2000,
+            showConfirmButton: true,
+            type: "success"
+        });
     });
 }

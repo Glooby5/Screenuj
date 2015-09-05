@@ -11,8 +11,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="{$basePath}/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/sweetalert.css">
 
-    <title>{ifset title}{include title|striptags} | {/ifset}Nette Sandbox</title>
+    <title>Screenuj.eu</title>
 
     <link rel="shortcut icon" href="{$basePath}/favicon.ico">
     
@@ -31,6 +32,7 @@
             <div class="title">
                 <h1><a href="{link Homepage:}">Screenuj.eu</a></h1>
             </div>
+            
             <div class="login-container">
                 {snippet loginSnippet}
                     {if $user->loggedIn}
@@ -54,12 +56,13 @@
     </div>
     
     {block scripts}
-        <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script type="text/javascript">
             var fbLink = {link Sign: 'do' => 'facebook'};
         </script>
         <script src="{$basePath}/js/fb.js"></script>
         <script src="{$basePath}/js/nette.ajax.js"></script>
+        <script src="{$basePath}/js/sweetalert.min.js"></script>
     {/block}   
     <script>
         $(function () {

@@ -23,20 +23,17 @@ class HomepagePresenter extends BasePresenter
                 
     }
     
-    public function renderDetail($id)
+    public function renderDetail($code)
     {
-        $image = $this->imageService->findOneBy(['link.code' => $id]);
+        $image = $this->imageService->findOneBy(['link.code' => $code]);
         
         if (!$image)
         {
             throw new BadRequestException("Neexistující kód obrázku", 404);
-        }
+        }       
         
-       
-        
-        $this->template->source = $this->imageStorage->LoadImage($image);
-        
-        $this->template->setFile(__DIR__ .'\templates\Homepage\detail.latte');
+        $this->template->source = $this->imageStorage->LoadImage($image);        
+        //$this->template->setFile(__DIR__ .'\templates\Homepage\detail.latte');
 
     }
 }

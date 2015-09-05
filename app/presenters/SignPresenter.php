@@ -42,7 +42,7 @@ class SignPresenter extends BasePresenter
         $data = ['email' => $user->email, 'name' => $user->name, 'type' => 'Facebook', 'signed' => new \DateTime()];          
         $identity = new \Nette\Security\Identity($user->id, NULL, $data);
         
-        $this->flashMessage('You have been signed in.');
+        //$this->flashMessage('You have been signed in.');
         $this->user->login($identity);
         $this->template->user = $this->user;
         $this->redrawControl("loginSnippet");
@@ -51,7 +51,7 @@ class SignPresenter extends BasePresenter
     public function handleOut()
     {
         $this->getUser()->logout();
-        $this->flashMessage('You have been signed out.');
+        //$this->flashMessage('You have been signed out.');
         
         $this->template->user = $this->user;
         $this->redrawControl("loginSnippet");

@@ -5,14 +5,19 @@
 
     
     function checkFile(file) {
+        if (!file) {
+            sweetAlert("Prázdno!", "Schránka neobsahuje žádný obrázek.", "error");
+            return false;
+        }
+            
         if (file.size > 10485760) {
-            console.log("moc MB")
+            sweetAlert("Moc velké", "Velikost obrázku přesahuje povolenou velikost 10 MB!", "error");
             return false;
         }
         
         var types = ["image/png", "image/jpeg"];        
         if (types.indexOf(file.type) === -1) {
-            console.log("není to obrázek");
+            sweetAlert("Nepodporováno!", "Vložený soubor není podporován.", "error");
             return false;
         }        
         return true;
@@ -311,7 +316,6 @@
     
     
     function sendFile(file) {
-        console.log("send file");
         var xhr = new XMLHttpRequest();
 
         xhr.upload.addEventListener("progress", function(e) {
@@ -345,6 +349,7 @@
     }
     
     function UploadFile(file) {
+        
         if (checkFile(file)) {
             console.log("check file");
             var reader = new FileReader();

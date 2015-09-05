@@ -20,10 +20,18 @@ class RouterFactory
 	public static function createRouter()
 	{
 		$router = new RouteList();
-                $router[] = new Route('<id>', 'Homepage:detail');
-		$router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
+                               
+                $router[] = new Route('sign', 'Sign:');                
+                $router[] = new Route('<code>', 'Homepage:Detail');
                 
+                $router[] = new Route('<presenter>/<action>[/<id>]', array(
+                    'presenter' => 'Homepage',
+                    'action'    => 'default'
+                ));
+                
+
 		return $router;
+             
 	}
 
 }
