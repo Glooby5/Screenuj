@@ -27,7 +27,15 @@ services:
 	- Screenuj\Services\ImageService
 	- Screenuj\Services\UserService
 	- Screenuj\Services\LinkService
-
+	nette.latteFactory:
+		setup:
+			- setAutoRefresh(true)
+	
+nette:
+	latte:
+		macros:
+			- Screenuj\Model\MyMacros::install
+	
 extensions:
     console: Kdyby\Console\DI\ConsoleExtension
     events: Kdyby\Events\DI\EventsExtension

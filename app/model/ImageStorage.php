@@ -16,6 +16,7 @@ class ImageStorage extends Object
     
     private $dir;
     private $folder;
+    private static $sFolder;
     
     /** @var ImageService */
     private $imageService;
@@ -27,6 +28,7 @@ class ImageStorage extends Object
     {
         $this->dir = $dir;
         $this->folder = $folder;
+        self::$sFolder = $folder;
         
         if (!is_dir($dir)) {
             umask(0);
@@ -106,6 +108,12 @@ class ImageStorage extends Object
         $url = $this->dir . $image->folder . '/' . $image->name;
 
         return $this->folder . $image->folder . '/' . $image->name;
-
+    }
+    
+    public static function LoadThumbUrl(Image2 $image)
+    {
+        $path = self::$sFolder . $image->folder . '/thumbs/' . $image->name;
+        dump($path);
+        return $path;
     }
 }

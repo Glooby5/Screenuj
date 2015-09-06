@@ -18,18 +18,19 @@ class ImageService extends BaseService
         return Image::getClassName();
     }
     
-    public function getByCode($code)
+    public function getByUserID($user)
     {
         $query = $this->getEm()->createQueryBuilder()
                 ->select(['i'])
                 ->from(Image::getClassName(), 'i')
                 ->leftJoin('i.link', 'l')
-                ->andWhere('l.code = :code')
-                ->setParameter('code', $code);
+                ->leftJoin('i.user', 'u')
+                ->andWhere('u.id = :user')
+                ->setParameter('user', $user);
         
         
         $query = $query->getQuery();
-        $result = $query->getResult();
+        $result = $query->getResult(\Doctrine\ORM\Query::HYDRATE_OBJECT);
        
         return $result;
     }

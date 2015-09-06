@@ -28,19 +28,25 @@
 
 <body>
     <div id="top">
-        <header>
+        <header class="top-container">
             <div class="title">
                 <h1><a href="{link Homepage:}">Screenuj.eu</a></h1>
             </div>
-            
-            <div class="login-container">
-                {snippet loginSnippet}
+            <div class="right" n:snippet="loginSnippet">
+                <div class="menu">
                     {if $user->loggedIn}
-                        <a href="{link Sign: 'do' => 'out'}" class="ajax btn logout">Odhlásit se</a>
-                    {else}            
-                        <a href="#" id="fb-login" class="btn auth facebook">Přihlásit se</a>
+                        <a href="{link Uploaded:}">Nahrané</a>
                     {/if}
-                {/snippet}
+                </div>
+                <div class="login-container">
+                    
+                        {if $user->loggedIn}
+                            <a href="{link Sign: 'do' => 'out'}" class="ajax btn logout">Odhlásit se</a>
+                        {else}            
+                            <a href="#" id="fb-login" class="btn auth facebook">Přihlásit se</a>
+                        {/if}
+                  
+                </div>
             </div>
         </header>
     </div>

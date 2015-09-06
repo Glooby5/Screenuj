@@ -33,7 +33,7 @@ class Link extends \Kdyby\Doctrine\Entities\BaseEntity
     
     /**
      * @var Image
-     * @ORM\OneToOne(targetEntity="Image", inversedBy="image")
+     * @ORM\OneToOne(targetEntity="Image", inversedBy="link")
      */
     public $image;
     

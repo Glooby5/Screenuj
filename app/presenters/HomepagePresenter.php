@@ -23,6 +23,12 @@ class HomepagePresenter extends BasePresenter
                 
     }
     
+    public function renderDefault($code)
+    {
+        
+    }
+
+
     public function renderDetail($code)
     {
         $image = $this->imageService->findOneBy(['link.code' => $code]);
@@ -31,7 +37,9 @@ class HomepagePresenter extends BasePresenter
         {
             throw new BadRequestException("Neexistující kód obrázku", 404);
         }       
+        $images = $this->imageService->getByUserID($this->user->id);
         
+        $this->template->image = $images[0];
         $this->template->source = $this->imageStorage->LoadImage($image);        
         //$this->template->setFile(__DIR__ .'\templates\Homepage\detail.latte');
 
