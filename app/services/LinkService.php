@@ -43,8 +43,6 @@ class LinkService extends BaseService
         $expired->add(new \DateInterval("P7D"));
         
         $link = new Link($code, $expired, $image, $user);
-//        dump($link);
-//        die();
         $this->save($link);
 
         return $code;

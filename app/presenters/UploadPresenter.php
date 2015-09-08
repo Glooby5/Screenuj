@@ -32,10 +32,27 @@ class UploadPresenter extends BasePresenter
         $type = $this->user->isLoggedIn() ? ImageStorage::PRIVATE_IMG : ImageStorage::PUBLIC_IMG;
         $user = $this->user->isLoggedIn() ? $this->userService->get($this->user->id) : NULL;
             
-        $code = $this->storage->save($filename, $data, $type, $user);
+        $result = $this->storage->save($filename, $data, $type, $user);
         
-        $this->sendResponse(new JsonResponse(['state' => 'success', 'code' => $code]));
+        $this->sendResponse(new JsonResponse(['state' => 'success', 'code' => $result['code'], 'token' => $result['image']->token]));
         
         die();         
+    }
+    
+    public function actionUpdate($token, $image)
+    {
+        
+        try
+        {
+            $this->storage->Update($token, $image);
+        }
+        catch (\Exception $ex)
+        {
+            $this->sendResponse(new JsonResponse(['status' => 'error', 'message' => $ex->getMessage()]));
+        }
+        
+        $this->sendResponse(new JsonResponse(['status' => 'success']));
+        
+        die();
     }
 }

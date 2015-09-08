@@ -1,5 +1,5 @@
 (function() {
-    var canvas, context, canvaso, contexto;
+    var canvas, context, canvaso, contexto, canvasF, contextF;
     var tool;
     var tool_default = 'pencil';
 
@@ -28,6 +28,7 @@
         
         // Find the canvas element.
         canvaso = document.getElementById('imageView');
+        
         if (!canvaso) {
             alert('Error: I cannot find the canvas element!');
             return;
@@ -40,6 +41,8 @@
 
         // Get the 2D canvas context.
         contexto = canvaso.getContext('2d');
+        
+        
         if (!contexto) {
             alert('Error: failed to getContext!');
             return;
@@ -52,13 +55,22 @@
             alert('Error: I cannot create a new canvas element!');
             return;
         }
-
+        
+        canvasF = document.createElement('canvas');
+        console.log(canvasF);
         canvas.id = 'imageTemp';
         canvas.width = canvaso.width;
         canvas.height = canvaso.height;
-        container.appendChild(canvas);
+        container.appendChild(canvas);        
 
         context = canvas.getContext('2d');
+        
+        
+        canvasF.id = 'imageFull';
+        canvasF.width = canvaso.width;
+        canvasF.height = canvaso.height;
+        //container.appendChild(canvasF);
+        contextF = canvasF.getContext('2d');
 
         // Get the tool select input.
         var tool_select = document.getElementById('dtool');
@@ -76,10 +88,6 @@
         
         context.imageSmoothingEnabled = true;
         
-//	// Attach the mousedown, mousemove and mouseup event listeners
-//	$("#imageTemp").on('mousedown', ev_canvas);
-//	$("#imageTemp").on('mousemove', ev_canvas);
-//	$("#imageTemp").on('mouseup', ev_canvas);
         canvas.addEventListener('mousedown', ev_canvas, false);
         canvas.addEventListener('mousemove', ev_canvas, false);
         canvas.addEventListener('mouseup', ev_canvas, false);
@@ -114,7 +122,9 @@
     // #imageTemp is cleared. This function is called each time when the user 
     // completes a drawing operation.
     function img_update() {
+        
         contexto.drawImage(canvas, 0, 0);
+        contextF.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, canvasF.width, canvasF.height);
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
     
@@ -283,6 +293,7 @@
         var reader = new FileReader();
         reader.onload = function(e) {
             var canvas = document.getElementById('imageView');
+            
             context = canvas.getContext('2d');
             console.log(context);
             var img = new Image();
@@ -302,17 +313,29 @@
                             0, 0, canvas.width, canvas.height);  // destination rectangle
                 }
 
+
                 $("#edit-container").css('width', canvas.width);
                 $("#edit-container").css('height', canvas.height);
                 $("#progress-container").css('width', canvas.width);
 
                 initEdit();
+                canvasF.width = img.width;
+                canvasF.height = img.height;
+                                console.log(contextF);
+                                console.log(canvasF)
+                contextF.drawImage(img, 0, 0);
+                
+                
+                
+                $("#edit-container").after("<a href=\"#\" id=\"save-btn\">Uložit</a>");
             }
             
             img.src = e.target.result;
         }  
         reader.readAsDataURL(file);
     }
+    
+    
     
     
     function sendFile(file) {
@@ -333,9 +356,9 @@
                 var response = $.parseJSON(xhr.responseText);
                 if (response.state == "success") {
                     $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
-                    //$("#result-input").focus();
                     $("#progress-container").fadeOut();
                     ShowImage(file);
+                    token = response.token;
                 }
             }
         };
@@ -347,6 +370,8 @@
 
         xhr.send(file);
     }
+    
+    var token;
     
     function UploadFile(file) {
         
@@ -368,6 +393,32 @@
         }
     }    
     
+    function UpdateImage() {
+        $.nette.ajax({
+            type: 'POST',
+            url: updateLink,
+            data: {
+                token: token,
+                image: canvasF.toDataURL()
+            }
+        }).done(function (response) {
+            if (response.status == "success") {
+                swal({
+                    title: "Aktualizováno!",
+                    text: "Úpravy byly úspěšně uloženy.",
+                    type: "success"
+                });
+            } else {
+                console.log(response);
+                swal({
+                    title: "Chyba!",
+                    text: response.message,
+                    type: "error"
+                });
+            }
+        });
+    }
+    
     function FileDragHover(e) {
         e.stopPropagation();
         e.preventDefault();        
@@ -385,11 +436,18 @@
         var item = e.originalEvent.clipboardData.items[0];
         UploadFile(item.getAsFile());
     }
+    
+    $(document).on('click', '#save-btn', function(e) {
+        e.preventDefault();
+        UpdateImage();
+    });
 
     $(document).ready(function() {
         $(window).on("paste", PasteEvent);
         $("#upload-area").on("dragover", FileDragHover);
         $("#upload-area").on("dragleave", FileDragHover);
         $("#upload-area").on("drop", FileSelectHandler);
+        
+        
     });
 })();

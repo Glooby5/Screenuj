@@ -97,10 +97,23 @@ class ImageStorage extends Object
         
         $image->save($thumbFileName, 50, Image::JPEG);
         
-        $imageRecord = new Image2($name, $dir, $user);
-        $this->imageService->save($imageRecord);
+        $result['image'] = new Image2($name, $dir, $user, md5((new \DateTime())->format('Y-m-d H:i:s')));
+        $this->imageService->save($result['image']);
+        $result['code'] = $this->linkService->create($result['image']);
         
-        return $this->linkService->create($imageRecord);
+        return $result;
+    }
+    
+    public function Update($token, $data)
+    {
+        $olgImage = $this->imageService->findOneBy(['token' => $token]);
+        
+        if (!$olgImage)
+            throw new \Exception("Neplatný token.");
+        
+        $image = Image::fromFile($data);
+        $image->save($this->dir . $olgImage->folder . '/' . $olgImage->name);        
+        
     }
     
     public function LoadImage(Image2 $image)
@@ -113,7 +126,7 @@ class ImageStorage extends Object
     public static function LoadThumbUrl(Image2 $image)
     {
         $path = self::$sFolder . $image->folder . '/thumbs/' . $image->name;
-        dump($path);
+        
         return $path;
     }
 }

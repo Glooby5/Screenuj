@@ -44,15 +44,22 @@ class Image extends \Kdyby\Doctrine\Entities\BaseEntity
     public $link;
     
     /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    public $token;
+    
+    /**
      * @param string $name
      * @param string $folder
      * @param User $user
      */
-    public function __construct($name, $folder, $user)
+    public function __construct($name, $folder, $user, $token)
     {
         $this->name = $name;
         $this->folder = $folder;
         $this->user = $user;
         $this->uploaded = new \DateTime();
+        $this->token = $token;
     }
 }

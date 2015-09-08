@@ -6,8 +6,6 @@
         <div id="upload-area">
             <p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>
         </div>
-        
-        
 
         <div id="progress-container"></div>
         <p><label>Drawing tool: <select id="dtool">' +
@@ -28,6 +26,7 @@
     {include parent}
     <script type="text/javascript">
         var uploadLink = {link Upload:Save};
+        var updateLink = {link Upload:Update};
         var uploadHandle = {link Upload:NewSave};
     </script>
     <script src="{$basePath}/js/jquery.upload.js"></script>
