@@ -210,6 +210,81 @@
     };
         
 
+    tools.crop = function () {
+        var tool = this;
+        this.started = false;
+
+        this.mousedown = function (ev) {
+            tool.started = true;
+            tool.x0 = ev._x;
+            tool.y0 = ev._y;
+        };
+
+        this.mousemove = function (ev) {
+            if (!tool.started) {
+                return;
+            }
+
+            var x = Math.min(ev._x, tool.x0),
+                    y = Math.min(ev._y, tool.y0),
+                    w = Math.abs(ev._x - tool.x0),
+                    h = Math.abs(ev._y - tool.y0);
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (!w || !h) {
+                return;
+            }
+            //console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
+            context.strokeRect(x, y, w, h);
+        };
+
+        this.mouseup = function (ev) {
+            if (tool.started) {
+                tool.mousemove(ev);
+                tool.started = false;
+                var x = Math.min(ev._x, tool.x0),
+                    y = Math.min(ev._y, tool.y0),
+                    w = Math.abs(ev._x - tool.x0),
+                    h = Math.abs(ev._y - tool.y0);
+                console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
+                
+//                canvasF.width = w;                
+//                canvasF.height = h;
+//                var canvasTmp = canvaso;
+                
+
+                var scaleX = canvasF.width / canvas.width;
+                
+                contextF.drawImage(canvasF, x * scaleX, y * scaleX, w * scaleX, h * scaleX, 0, 0, w * scaleX, h * scaleX);
+                //contexto.drawImage(canvaso, x, y, w, h, 0, 0, w, h);
+                
+                
+                var temp_cnvs = document.createElement('canvas');
+                var temp_cntx = temp_cnvs.getContext('2d');
+            // set it to the new width & height and draw the current canvas data into it // 
+                temp_cnvs.width = w; 
+                temp_cnvs.height = h;
+                temp_cntx.drawImage(canvaso, x, y, w, h, 0, 0, w, h);
+            // resize & clear the original canvas and copy back in the cached pixel data //
+                canvaso.width = w; 
+                canvaso.height = h;
+                contexto.drawImage(temp_cnvs, 0, 0);
+                
+                
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.width = w; 
+                canvas.height = h;
+                
+                $("#edit-container").css('width', w);
+                $("#edit-container").css('height', h);
+//                canvaso.width = w;                
+//                canvaso.height = h;
+                
+            }
+        };
+    };
+
     // The rectangle tool.
     tools.rect = function () {
         var tool = this;
@@ -236,7 +311,7 @@
             if (!w || !h) {
                 return;
             }
-
+            //console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
             context.strokeRect(x, y, w, h);
         };
 
@@ -244,6 +319,11 @@
             if (tool.started) {
                 tool.mousemove(ev);
                 tool.started = false;
+                var x = Math.min(ev._x, tool.x0),
+                    y = Math.min(ev._y, tool.y0),
+                    w = Math.abs(ev._x - tool.x0),
+                    h = Math.abs(ev._y - tool.y0);
+                console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
                 img_update();
             }
         };
@@ -264,7 +344,7 @@
             if (!tool.started) {
                 return;
             }
-
+            
             context.clearRect(0, 0, canvas.width, canvas.height);
 
             context.beginPath();
@@ -278,6 +358,7 @@
             if (tool.started) {
                 tool.mousemove(ev);
                 tool.started = false;
+                
                 img_update();
             }
         };
