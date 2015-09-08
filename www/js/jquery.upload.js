@@ -249,19 +249,22 @@
                     h = Math.abs(ev._y - tool.y0);
                 console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
                 
-//                canvasF.width = w;                
-//                canvasF.height = h;
-//                var canvasTmp = canvaso;
-                
-
-                var scaleX = canvasF.width / canvas.width;
-                
-                contextF.drawImage(canvasF, x * scaleX, y * scaleX, w * scaleX, h * scaleX, 0, 0, w * scaleX, h * scaleX);
-                //contexto.drawImage(canvaso, x, y, w, h, 0, 0, w, h);
-                
-                
                 var temp_cnvs = document.createElement('canvas');
                 var temp_cntx = temp_cnvs.getContext('2d');
+
+                var scaleX = canvasF.width / canvas.width;                
+                
+                temp_cnvs.width = w * scaleX; 
+                temp_cnvs.height = h * scaleX;
+                temp_cntx.drawImage(canvasF, x * scaleX, y * scaleX, w * scaleX, h * scaleX, 0, 0, w * scaleX, h * scaleX);
+
+                canvasF.width = w * scaleX; 
+                canvasF.height = h * scaleX;
+                contextF.drawImage(temp_cnvs, 0, 0);
+                
+                
+                temp_cnvs = document.createElement('canvas');
+                temp_cntx = temp_cnvs.getContext('2d');
             // set it to the new width & height and draw the current canvas data into it // 
                 temp_cnvs.width = w; 
                 temp_cnvs.height = h;
