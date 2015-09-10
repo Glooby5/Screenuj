@@ -382,22 +382,52 @@
             console.log(context);
             var img = new Image();
             
-            img.onload = function () {
-                if (img.width < 1000) {
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    context.drawImage(img, 0, 0, img.width, img.height, // source rectangle
-                            0, 0, canvas.width, canvas.height);  // destination rectangle
-                } else {
-                    var w, h;
-                    h = img.width / canvas.width;
-                    h = img.height / h;
-                    canvas.height = h;
-                    context.drawImage(img, 0, 0, img.width, img.height, // source rectangle
-                            0, 0, canvas.width, canvas.height);  // destination rectangle
+            img.onload = function () {                            
+                var wWidth = $(window).width() * 0.8;
+                var wHeight = $(window).height() * 0.8;
+                console.log("init width: " + wWidth + " init height: " + wHeight)
+
+                if (wWidth > img.width)
+                {
+                    if (wHeight > img.height)
+                    {
+                        w = img.width;
+                        h = img.height;
+                    }
+                    else
+                    {
+                        w = wHeight / img.height * img.width;
+                        h = wHeight;
+                    }
                 }
+                else
+                {
+                    if (wHeight > img.height)
+                    {
+                        w = wWidth;
+                        h = wWidth / img.width * img.height;
+                    }
+                    else
+                    {
+                        w = wWidth;
+                        h = wWidth / img.width * img.height;
 
+                        if (h > wHeight)
+                        {
+                            h = wHeight;
+                            w = wHeight / img.height * img.width;
+                        }
+                    }
+                }                
+                
+                console.log("width: " + w + " height: " + h);
+                
+                canvas.width = w;
+                canvas.height = h;
+                context.drawImage(img, 0, 0, img.width, img.height, // source rectangle
+                        0, 0, w, h);
 
+                $("#main").css("width", 'auto');
                 $("#edit-container").css('width', canvas.width);
                 $("#edit-container").css('height', canvas.height);
                 $("#progress-container").css('width', canvas.width);
@@ -418,9 +448,6 @@
         }  
         reader.readAsDataURL(file);
     }
-    
-    
-    
     
     function sendFile(file) {
         var xhr = new XMLHttpRequest();
