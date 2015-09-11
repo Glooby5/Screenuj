@@ -3,20 +3,22 @@
         
         <div id="result"></div>
         
-        <div id="upload-area">
-            <p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>
+        <div class="upload-container">
+            <div class="toolbox">
+                <div class="item pencil selected"></div>
+                <div class="item rectangle"></div>
+                <div class="item line"></div>
+                <div class="item crop"></div>
+                <div class="item save"></div>
+            </div>            
+            
+            <div id="upload-area">
+                <p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>
+            </div>
         </div>
 
         <div id="progress-container"></div>
-        <p><label>Drawing tool: <select id="dtool">' +
-                '<option value="line">Line</option>' +
-                '<option value="rect">Rectangle</option>' +
-                '<option value="pencil">Pencil</option>' +
-                '<option value="highlighter">Highlighter</option>' +
-                '<option value="crop">Crop</option>' +
-                '</select></label></p>
-        <!--<div id="edit-container"></div>-->
-
+       
         <div id="messages">
         </div>
     </div>

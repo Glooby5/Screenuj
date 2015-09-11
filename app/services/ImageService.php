@@ -26,6 +26,7 @@ class ImageService extends BaseService
                 ->leftJoin('i.link', 'l')
                 ->leftJoin('i.user', 'u')
                 ->andWhere('u.id = :user')
+                ->orderBy('i.uploaded', 'DESC')
                 ->setParameter('user', $user);
         
         

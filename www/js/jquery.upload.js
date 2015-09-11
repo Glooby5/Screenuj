@@ -1,7 +1,8 @@
-(function() {
+(function Upload() {
     var canvas, context, canvaso, contexto, canvasF, contextF;
     var tool;
     var tool_default = 'pencil';
+    
     
     function checkFile(file) {
         if (!file) {
@@ -26,14 +27,15 @@
         console.log("init");
         
         canvaso = document.getElementById('imageView');
+        canvaso.imageSmoothingEnabled = false;
         contexto = canvaso.getContext('2d');
 
         var container = canvaso.parentNode;
         canvas = document.createElement('canvas');
-
+        canvas.imageSmoothingEnabled = false;
         
         canvasF = document.createElement('canvas');
-        console.log(canvasF);
+        canvasF.imageSmoothingEnabled = false;
         canvas.id = 'imageTemp';
         canvas.width = canvaso.width;
         canvas.height = canvaso.height;
@@ -46,23 +48,18 @@
         canvasF.height = canvaso.height;
         contextF = canvasF.getContext('2d');
 
-        var tool_select = document.getElementById('dtool');
-        if (!tool_select) {
-            alert('Error: failed to get the dtool element!');
-            return;
-        }
-        tool_select.addEventListener('change', ev_tool_change, false);
-
         if (tools[tool_default]) {
             tool = new tools[tool_default]();
-            tool_select.value = tool_default;
         }
         
-        context.imageSmoothingEnabled = true;
+        //context.imageSmoothingEnabled = true;
         
         canvas.addEventListener('mousedown', ev_canvas, false);
         canvas.addEventListener('mousemove', ev_canvas, false);
         canvas.addEventListener('mouseup', ev_canvas, false);
+        
+        $('.toolbox').show();
+        $('.upload-container').addClass('uploaded');
     }
     
     function ev_canvas(ev) {
@@ -80,11 +77,29 @@
         }
     }
     
-    function ev_tool_change (ev) {
-        if (tools[this.value]) {
-            tool = new tools[this.value]();
-        }
-    }
+    var tools = {};
+    
+    $(document).on('click', '.toolbox .item', function(e) {
+       tool = new tools['pencil']();
+       $('.toolbox .item').removeClass('selected');
+       $(this).addClass('selected');
+       
+       if ($(this).hasClass('pencil')) {
+           tool = new tools['pencil']();
+       } 
+       else if ($(this).hasClass('rectangle')) {
+           tool = new tools['rect']();
+       }
+       else if ($(this).hasClass('line')) {
+           tool = new tools['line']();
+       }
+       else if ($(this).hasClass('crop')) {
+           tool = new tools['crop']();
+       }
+       else if ($(this).hasClass('save')) {
+           UpdateImage();           
+       }       
+    });
     
     function img_update() {
         
@@ -93,7 +108,7 @@
         context.clearRect(0, 0, canvas.width, canvas.height);
     }    
 
-    var tools = {};
+    
 
 
     tools.pencil = function () {
@@ -218,8 +233,8 @@
         
         resize(canvaso, canvasF, points, w, h);        
 
-        $("#edit-container").css('width', w);
-        $("#edit-container").css('height', h);
+        $(".upload-container").css('width', w);
+        $(".upload-container").css('height', h);
         canvas.width = w;
         canvas.height = h;
     }
@@ -229,6 +244,7 @@
         var temp_cntx = temp_cnvs.getContext('2d');
         var toContext = toCanvas.getContext('2d');
 
+        temp_cnvs.imageSmoothingEnabled = false;
         temp_cnvs.width = newW;
         temp_cnvs.height = newH;
         temp_cntx.drawImage(fromCanvas, points[0], points[1], points[2], points[3], 0, 0, newW, newH);
@@ -312,7 +328,6 @@
     function calculateDimensions(imgWidth, imgHeight) {
         var wWidth = $(window).width() * 0.8;
         var wHeight = $(window).height() * 0.8;
-        console.log("init width: " + wWidth + " init height: " + wHeight)
 
         if (wWidth > imgWidth)
         {
@@ -371,12 +386,13 @@
                 
                 canvas.width = w;
                 canvas.height = h;
+                canvas.imageSmoothingEnabled = false;
                 context.drawImage(img, 0, 0, img.width, img.height, // source rectangle
                         0, 0, w, h);
 
                 $("#main").css("width", 'auto');
-                $("#edit-container").css('width', canvas.width);
-                $("#edit-container").css('height', canvas.height);
+                $(".upload-container").css('width', canvas.width);
+                $(".upload-container").css('height', canvas.height);
                 $("#progress-container").css('width', canvas.width);
 
                 initEdit();
@@ -384,9 +400,6 @@
                 canvasF.width = img.width;
                 canvasF.height = img.height;
                 contextF.drawImage(img, 0, 0);                
-                
-                
-                $("#edit-container").after("<a href=\"#\" id=\"save-btn\">Uložit</a>");
             }
             
             img.src = e.target.result;
@@ -472,6 +485,8 @@
                     type: "error"
                 });
             }
+            $('.toolbox .item .save').removeClass('selected');
+            $('.toolbox .item .pencil').addClass('selected');
         });
     }
     
@@ -497,6 +512,8 @@
         e.preventDefault();
         UpdateImage();
     });
+    
+    
 
     $(document).ready(function() {
         $(window).on("paste", PasteEvent);

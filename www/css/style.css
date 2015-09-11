@@ -118,9 +118,55 @@ a { text-decoration: none; }
     transition: width .3s;
 }
 
-#edit-container {
+.upload-container {
     margin: auto;
     margin-top: 20px;
+    position: relative;    
+}
+
+.upload-container.uploaded {
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.59);
+}
+
+.upload-container .toolbox {
+    position: absolute;
+    left: -50px;
+    width: 50px;
+    display: none;
+}
+
+.toolbox .item {
+    width: 35px;
+    height: 35px;
+    background-color: #40AAE0;
+    margin-bottom: 5px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.toolbox .selected {
+    background-color: black;
+}
+
+.toolbox .pencil {
+    background-image: url('/../www/images/edit45.png');
+}
+
+.toolbox .rectangle {
+    background-image: url('/../www/images/rectangle.png');
+}
+
+.toolbox .line {
+    background-image: url('/../www/images/line.png');
+}
+
+.toolbox .crop {
+    background-image: url('/../www/images/crop.png');
+}
+
+.toolbox .save {
+    background-image: url('/../www/images/save.png');
 }
 
 #image-view {
