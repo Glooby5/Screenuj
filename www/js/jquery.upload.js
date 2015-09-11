@@ -2,7 +2,6 @@
     var canvas, context, canvaso, contexto, canvasF, contextF;
     var tool;
     var tool_default = 'pencil';
-
     
     function checkFile(file) {
         if (!file) {
@@ -26,35 +25,12 @@
     function initEdit () {
         console.log("init");
         
-        // Find the canvas element.
         canvaso = document.getElementById('imageView');
-        
-        if (!canvaso) {
-            alert('Error: I cannot find the canvas element!');
-            return;
-        }
-
-        if (!canvaso.getContext) {
-            alert('Error: no canvas.getContext!');
-            return;
-        }
-
-        // Get the 2D canvas context.
         contexto = canvaso.getContext('2d');
-        
-        
-        if (!contexto) {
-            alert('Error: failed to getContext!');
-            return;
-        }
 
-        // Add the temporary canvas.
         var container = canvaso.parentNode;
         canvas = document.createElement('canvas');
-        if (!canvas) {
-            alert('Error: I cannot create a new canvas element!');
-            return;
-        }
+
         
         canvasF = document.createElement('canvas');
         console.log(canvasF);
@@ -63,16 +39,13 @@
         canvas.height = canvaso.height;
         container.appendChild(canvas);        
 
-        context = canvas.getContext('2d');
-        
+        context = canvas.getContext('2d');        
         
         canvasF.id = 'imageFull';
         canvasF.width = canvaso.width;
         canvasF.height = canvaso.height;
-        //container.appendChild(canvasF);
         contextF = canvasF.getContext('2d');
 
-        // Get the tool select input.
         var tool_select = document.getElementById('dtool');
         if (!tool_select) {
             alert('Error: failed to get the dtool element!');
@@ -80,7 +53,6 @@
         }
         tool_select.addEventListener('change', ev_tool_change, false);
 
-        // Activate the default tool.
         if (tools[tool_default]) {
             tool = new tools[tool_default]();
             tool_select.value = tool_default;
@@ -93,8 +65,6 @@
         canvas.addEventListener('mouseup', ev_canvas, false);
     }
     
-    // The general-purpose event handler. This function just determines the mouse 
-    // position relative to the canvas element.
     function ev_canvas(ev) {
         if (ev.layerX || ev.layerX == 0) { // Firefox
             ev._x = ev.layerX;
@@ -104,52 +74,41 @@
             ev._y = ev.offsetY;
         }
 
-        // Call the event handler of the tool.
         var func = tool[ev.type];
         if (func) {
             func(ev);
         }
     }
     
-    // The event handler for any changes made to the tool selector.
     function ev_tool_change (ev) {
         if (tools[this.value]) {
             tool = new tools[this.value]();
         }
     }
     
-    // This function draws the #imageTemp canvas on top of #imageView, after which 
-    // #imageTemp is cleared. This function is called each time when the user 
-    // completes a drawing operation.
     function img_update() {
         
         contexto.drawImage(canvas, 0, 0);
         contextF.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, canvasF.width, canvasF.height);
         context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    
-     // This object holds the implementation of each drawing tool.
+    }    
+
     var tools = {};
 
-    // The drawing pencil.
+
     tools.pencil = function () {
         var tool = this;
         this.started = false;
         
-        context.lineWidth = 2;
+        context.lineWidth = 1;
         context.strokeStyle = "red";
 
-        // This is called when you start holding down the mouse button.
-        // This starts the pencil drawing.
         this.mousedown = function (ev) {
             context.beginPath();
             context.moveTo(ev._x, ev._y);
             tool.started = true;
         };
 
-        // This function is called every time you move the mouse. Obviously, it only 
-        // draws if the tool.started state is set to true (when you are holding down 
-        // the mouse button).
         this.mousemove = function (ev) {
             if (tool.started) {
                 context.lineTo(ev._x, ev._y);
@@ -157,7 +116,6 @@
             }
         };
 
-        // This is called when you release the mouse button.
         this.mouseup = function (ev) {
             if (tool.started) {
                 tool.mousemove(ev);
@@ -167,7 +125,6 @@
         };
     };
     
-    // The drawing pencil.
     tools.highlighter = function () {
         var tool = this;
         this.started = false;
@@ -175,8 +132,6 @@
         context.lineWidth = 15;
         contexto.strokeStyle = "rgba(255,197,82,0.05)";
 
-        // This is called when you start holding down the mouse button.
-        // This starts the pencil drawing.
         this.mousedown = function (ev) {
             context.strokeStyle = "rgba(255,197,82,0.05)";
             context.beginPath();
@@ -185,9 +140,6 @@
             tool.started = true;
         };
 
-        // This function is called every time you move the mouse. Obviously, it only 
-        // draws if the tool.started state is set to true (when you are holding down 
-        // the mouse button).
         this.mousemove = function (ev) {
             if (tool.started) {
                 context.strokeStyle = "rgba(255,197,82,0.05)";
@@ -197,7 +149,6 @@
             }
         };
 
-        // This is called when you release the mouse button.
         this.mouseup = function (ev) {
             if (tool.started) {
                 context.strokeStyle = "rgba(255,197,82,0.05)";
@@ -207,8 +158,7 @@
             }
         };
         
-    };
-        
+    };        
 
     tools.crop = function () {
         var tool = this;
@@ -226,16 +176,16 @@
             }
 
             var x = Math.min(ev._x, tool.x0),
-                    y = Math.min(ev._y, tool.y0),
-                    w = Math.abs(ev._x - tool.x0),
-                    h = Math.abs(ev._y - tool.y0);
+                y = Math.min(ev._y, tool.y0),
+                w = Math.abs(ev._x - tool.x0),
+                h = Math.abs(ev._y - tool.y0);
 
             context.clearRect(0, 0, canvas.width, canvas.height);
 
             if (!w || !h) {
                 return;
             }
-            //console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
+
             context.strokeRect(x, y, w, h);
         };
 
@@ -247,48 +197,47 @@
                     y = Math.min(ev._y, tool.y0),
                     w = Math.abs(ev._x - tool.x0),
                     h = Math.abs(ev._y - tool.y0);
-                console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
-                
-                var temp_cnvs = document.createElement('canvas');
-                var temp_cntx = temp_cnvs.getContext('2d');
-
-                var scaleX = canvasF.width / canvas.width;                
-                
-                temp_cnvs.width = w * scaleX; 
-                temp_cnvs.height = h * scaleX;
-                temp_cntx.drawImage(canvasF, x * scaleX, y * scaleX, w * scaleX, h * scaleX, 0, 0, w * scaleX, h * scaleX);
-
-                canvasF.width = w * scaleX; 
-                canvasF.height = h * scaleX;
-                contextF.drawImage(temp_cnvs, 0, 0);
-                
-                
-                temp_cnvs = document.createElement('canvas');
-                temp_cntx = temp_cnvs.getContext('2d');
-            // set it to the new width & height and draw the current canvas data into it // 
-                temp_cnvs.width = w; 
-                temp_cnvs.height = h;
-                temp_cntx.drawImage(canvaso, x, y, w, h, 0, 0, w, h);
-            // resize & clear the original canvas and copy back in the cached pixel data //
-                canvaso.width = w; 
-                canvaso.height = h;
-                contexto.drawImage(temp_cnvs, 0, 0);
-                
-                
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                canvas.width = w; 
-                canvas.height = h;
-                
-                $("#edit-container").css('width', w);
-                $("#edit-container").css('height', h);
-//                canvaso.width = w;                
-//                canvaso.height = h;
-                
+            
+                cropImage(x, y, w, h);                
+                context.clearRect(0, 0, canvas.width, canvas.height);              
             }
         };
     };
+    
+    function cropImage(x, y, w, h)
+    {                
+        var scaleX = canvasF.width / canvas.width;
+        points = [ x * scaleX, y * scaleX, w * scaleX, h * scaleX ];
+        resize(canvasF, canvasF, points, points[2], points[3]);
 
-    // The rectangle tool.
+        dim = calculateDimensions(points[2], points[3]);
+        w = dim[0];
+        h = dim[1];
+        var scaleX = canvasF.width / w;
+        points = [ 0, 0, w * scaleX, h * scaleX ];
+        
+        resize(canvaso, canvasF, points, w, h);        
+
+        $("#edit-container").css('width', w);
+        $("#edit-container").css('height', h);
+        canvas.width = w;
+        canvas.height = h;
+    }
+    
+    function resize(toCanvas, fromCanvas, points, newW, newH){
+        var temp_cnvs = document.createElement('canvas');
+        var temp_cntx = temp_cnvs.getContext('2d');
+        var toContext = toCanvas.getContext('2d');
+
+        temp_cnvs.width = newW;
+        temp_cnvs.height = newH;
+        temp_cntx.drawImage(fromCanvas, points[0], points[1], points[2], points[3], 0, 0, newW, newH);
+
+        toCanvas.width = newW; 
+        toCanvas.height = newH;
+        toContext.drawImage(temp_cnvs, 0, 0)
+    }
+
     tools.rect = function () {
         var tool = this;
         this.started = false;
@@ -314,7 +263,6 @@
             if (!w || !h) {
                 return;
             }
-            //console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
             context.strokeRect(x, y, w, h);
         };
 
@@ -322,17 +270,11 @@
             if (tool.started) {
                 tool.mousemove(ev);
                 tool.started = false;
-                var x = Math.min(ev._x, tool.x0),
-                    y = Math.min(ev._y, tool.y0),
-                    w = Math.abs(ev._x - tool.x0),
-                    h = Math.abs(ev._y - tool.y0);
-                console.log('x: ' + x + ', y: ' + y + ', w: ' + w + ', h: ' + h );
                 img_update();
             }
         };
     };
 
-    // The line tool.
     tools.line = function () {
         var tool = this;
         this.started = false;
@@ -367,58 +309,63 @@
         };
     };
 
+    function calculateDimensions(imgWidth, imgHeight) {
+        var wWidth = $(window).width() * 0.8;
+        var wHeight = $(window).height() * 0.8;
+        console.log("init width: " + wWidth + " init height: " + wHeight)
 
+        if (wWidth > imgWidth)
+        {
+            if (wHeight > imgHeight)
+            {
+                w = imgWidth;
+                h = imgHeight;
+            }
+            else
+            {
+                w = wHeight / imgHeight * imgWidth;
+                h = wHeight;
+            }
+        }
+        else
+        {
+            if (wHeight > imgHeight)
+            {
+                w = wWidth;
+                h = wWidth / imgWidth * imgHeight;
+            }
+            else
+            {
+                w = wWidth;
+                h = wWidth / imgWidth * imgHeight;
+
+                if (h > wHeight)
+                {
+                    h = wHeight;
+                    w = wHeight / imgHeight * imgWidth;
+                }
+            }
+        }
+        
+        return [w, h];
+    }
     
     function ShowImage(file) {
-        //$("#upload-area").hide();
         $("#upload-area").attr("id", "edit-container");
         $("#edit-container").html('<canvas id="imageView" width="1000"  height="700"><p>hovnoooooooooooooooooooooo</p>');
         
         var reader = new FileReader();
         reader.onload = function(e) {
-            var canvas = document.getElementById('imageView');
-            
+            var canvas = document.getElementById('imageView');            
             context = canvas.getContext('2d');
-            console.log(context);
+
             var img = new Image();
             
             img.onload = function () {                            
-                var wWidth = $(window).width() * 0.8;
-                var wHeight = $(window).height() * 0.8;
-                console.log("init width: " + wWidth + " init height: " + wHeight)
-
-                if (wWidth > img.width)
-                {
-                    if (wHeight > img.height)
-                    {
-                        w = img.width;
-                        h = img.height;
-                    }
-                    else
-                    {
-                        w = wHeight / img.height * img.width;
-                        h = wHeight;
-                    }
-                }
-                else
-                {
-                    if (wHeight > img.height)
-                    {
-                        w = wWidth;
-                        h = wWidth / img.width * img.height;
-                    }
-                    else
-                    {
-                        w = wWidth;
-                        h = wWidth / img.width * img.height;
-
-                        if (h > wHeight)
-                        {
-                            h = wHeight;
-                            w = wHeight / img.height * img.width;
-                        }
-                    }
-                }                
+                var w, h;
+                dim = calculateDimensions(img.width, img.height);
+                w = dim[0];
+                h = dim[1];
                 
                 console.log("width: " + w + " height: " + h);
                 
@@ -433,12 +380,10 @@
                 $("#progress-container").css('width', canvas.width);
 
                 initEdit();
+                
                 canvasF.width = img.width;
                 canvasF.height = img.height;
-                                console.log(contextF);
-                                console.log(canvasF)
-                contextF.drawImage(img, 0, 0);
-                
+                contextF.drawImage(img, 0, 0);                
                 
                 
                 $("#edit-container").after("<a href=\"#\" id=\"save-btn\">Uložit</a>");
@@ -557,8 +502,6 @@
         $(window).on("paste", PasteEvent);
         $("#upload-area").on("dragover", FileDragHover);
         $("#upload-area").on("dragleave", FileDragHover);
-        $("#upload-area").on("drop", FileSelectHandler);
-        
-        
+        $("#upload-area").on("drop", FileSelectHandler);        
     });
 })();
