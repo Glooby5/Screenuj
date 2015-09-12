@@ -1,8 +1,7 @@
 (function Upload() {
     var canvas, context, canvaso, contexto, canvasF, contextF;
     var tool;
-    var tool_default = 'pencil';
-    
+    var code;
     
     function checkFile(file) {
         if (!file) {
@@ -87,7 +86,12 @@
        else if ($(this).hasClass('save')) {
            UpdateImage();   
            return;
-       }       
+       }
+       else if ($(this).hasClass('view')) {
+           window.location.href = window.location.href + code;
+           return; 
+       }
+       
        
        $('.toolbox .item').removeClass('selected');
        $(this).addClass('selected');
@@ -416,9 +420,11 @@
                 console.log(xhr.status == 200 ? "success" : "failure");
                 var response = $.parseJSON(xhr.responseText);
                 if (response.state == "success") {
-                    $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
-                    $("#progress-container").fadeOut();
                     ShowImage(file);
+                    $("#result").html('<input id="result-input" type="text" value="' + window.location.href + response.code + '" autofocus="autofocus">').hide().fadeIn( "fast" );
+                    $("#result-input").select();
+                    $("#progress-container").fadeOut();
+                    code = response.code;
                     token = response.token;
                 }
             }

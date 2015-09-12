@@ -4,9 +4,14 @@
             <input id="result-input" type="text" value="http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" autofocus="autofocus">
         </div>
         <div id="image-view">
-            <img src="{$source}"/>
+            <a href="{$source}">
+                <img src="{$source}"/>
+            </a>
         </div>
     </div>
 {/block}
 
-
+{block scripts}
+    {include parent}
+    <script src="{$basePath}/js/image.view.js"></script>
+{/block}
