@@ -92,9 +92,9 @@ class ImageStorage extends Object
         
         $image->save($newFileName, 100, Image::JPEG);
         
-        $image->resize(300, NULL);
-        $thumbFileName = $this->dir . $dir . '/thumbs/'. $name;
-        
+        $image->resize(300, 300, Image::EXACT);
+        //$image->sharpen();
+        $thumbFileName = $this->dir . $dir . '/thumbs/'. $name;        
         $image->save($thumbFileName, 50, Image::JPEG);
         
         $result['image'] = new Image2($name, $dir, $user, md5((new \DateTime())->format('Y-m-d H:i:s')));
@@ -112,7 +112,11 @@ class ImageStorage extends Object
             throw new \Exception("Neplatný token.");
         
         $image = Image::fromFile($data);
-        $image->save($this->dir . $olgImage->folder . '/' . $olgImage->name);        
+        $image->save($this->dir . $olgImage->folder . '/' . $olgImage->name);              
+        
+        $image->resize(300, 300, Image::EXACT);
+        $thumbFileName = $this->dir . $olgImage->folder . '/thumbs/' . $olgImage->name;  
+        $image->save($thumbFileName, 50, Image::JPEG);
         
     }
     

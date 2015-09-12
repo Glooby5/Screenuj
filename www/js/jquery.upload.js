@@ -23,9 +23,7 @@
         return true;
     }
     
-    function initEdit () {
-        console.log("init");
-        
+    function initEdit () {        
         canvaso = document.getElementById('imageView');
         canvaso.imageSmoothingEnabled = false;
         contexto = canvaso.getContext('2d');
@@ -47,12 +45,6 @@
         canvasF.width = canvaso.width;
         canvasF.height = canvaso.height;
         contextF = canvasF.getContext('2d');
-
-        if (tools[tool_default]) {
-            tool = new tools[tool_default]();
-        }
-        
-        //context.imageSmoothingEnabled = true;
         
         canvas.addEventListener('mousedown', ev_canvas, false);
         canvas.addEventListener('mousemove', ev_canvas, false);
@@ -79,11 +71,7 @@
     
     var tools = {};
     
-    $(document).on('click', '.toolbox .item', function(e) {
-       tool = new tools['pencil']();
-       $('.toolbox .item').removeClass('selected');
-       $(this).addClass('selected');
-       
+    $(document).on('click', '.toolbox .item', function(e) {       
        if ($(this).hasClass('pencil')) {
            tool = new tools['pencil']();
        } 
@@ -97,8 +85,12 @@
            tool = new tools['crop']();
        }
        else if ($(this).hasClass('save')) {
-           UpdateImage();           
+           UpdateImage();   
+           return;
        }       
+       
+       $('.toolbox .item').removeClass('selected');
+       $(this).addClass('selected');
     });
     
     function img_update() {
@@ -326,7 +318,7 @@
     };
 
     function calculateDimensions(imgWidth, imgHeight) {
-        var wWidth = $(window).width() * 0.8;
+        var wWidth = $(window).width() * 0.9;
         var wHeight = $(window).height() * 0.8;
 
         if (wWidth > imgWidth)

@@ -169,6 +169,10 @@ a { text-decoration: none; }
     background-image: url('/../www/images/save.png');
 }
 
+.toolbox .save:active {
+    background-color: black;
+}
+
 #image-view {
     text-align: center;
     margin-top: 15px;
@@ -186,18 +190,17 @@ a { text-decoration: none; }
 }
 
 .main-container.gallery .thumb {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     float: left;
     display: inline-block;
     vertical-align: top;
     margin: 0 5px 25px 5px;
-    
 }
 
 .gallery .thumb img{
-    width: 150px;
-    height: 150px;   
+    width: 200px;
+    height: 200px;
     cursor: zoom-in;
     border: 1px solid black;
 }
