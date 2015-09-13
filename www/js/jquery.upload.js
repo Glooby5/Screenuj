@@ -489,6 +489,7 @@
             
             file = dataURItoBlob(img[0].src);
             $("#upload-area").attr('contenteditable', false);
+            $("#upload-area").css('cursor', 'default');
             UploadFile(file);
         } else {
             $("#upload-area").empty();
@@ -500,7 +501,8 @@
                     text: "Nepovedlo se načíst žádný obrázek.",
                     type: "error"
                 });
-            } else {                        
+            } else {         
+                $("#upload-area").empty();
                 that = {}
                 that.callself = function () {
                         waitforpastedata()             
