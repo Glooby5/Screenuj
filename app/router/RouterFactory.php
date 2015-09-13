@@ -24,7 +24,7 @@ class RouterFactory
                 $router[] = new Route('sign', 'Sign:');
                 $router[] = new Route('uploaded', 'Uploaded:');
                 //$router[] = new Route('Homepage/Detail/<code>', 'Homepage:Detail', Route::ONE_WAY);
-                $router[] = new Route('<code>', 'Homepage:Detail');
+                $router[] = new Route('<code>', 'Homepage:detail');
                
                 
                 $router[] = new Route('<presenter>/<action>[/<id>]', array(

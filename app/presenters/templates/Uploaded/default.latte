@@ -1,13 +1,16 @@
 {block content}
 <div class="main-container gallery">
-    {dump $images[0]}
-    {foreach $images as $image}
-        <div class="thumb">
-            <a href="{$baseUri}/{$image->getLink()[0]->code}">
-                <img src="/www/uploads/images{$image->folder}/thumbs/{$image->name}" />
-            </a>
-                <p>{$image->uploaded|date:'%d.%m.%Y %H:%M:%S'}</p>
-        </div>
-    {/foreach}
+    {if count($images) > 0}
+        {foreach $images as $image}
+            <div class="thumb">
+                <a href="{$baseUri}/{$image->getLink()[0]->code}">
+                    <img src="/www/uploads/{$image->folder}/thumbs/{$image->name}" />
+                </a>
+                    <p>{$image->uploaded|date:'%d.%m.%Y %H:%M:%S'}</p>
+            </div>
+        {/foreach}
+    {else}
+        <p>Žádné obrázky.</p>
+    {/if}
 </div>
 {/block}
