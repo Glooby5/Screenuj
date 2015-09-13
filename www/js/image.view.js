@@ -45,5 +45,15 @@ $(document).ready(function() {
     res = calculateDimensions(image.width(), image.height());
     image.css('width', res[0]);
     image.css('height', res[1]);
+    
+    $(window).resize(function() {
+    console.log("resize");
+    image = $("#image-view img");
+    console.log(image);
+    res = calculateDimensions(image.width(), image.height());
+    image.css('width', res[0]);
+    image.css('height', res[1]);
 });
+});
+
 

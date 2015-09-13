@@ -10,7 +10,7 @@ body {
 a { text-decoration: none; }
 
 #main {
-    width: 1000px;
+    /* width: 1000px; */
     margin: 0 auto;
 }
 
@@ -21,8 +21,9 @@ a { text-decoration: none; }
 }
 
 #top header {
+    min-width: 500px;
     margin: 0 auto;
-    width: 1000px;
+    max-width: 1000px;
     font-family: 'Teko', sans-serif;
     font-size: 25px;
     text-transform: uppercase;
@@ -81,11 +82,16 @@ a { text-decoration: none; }
 }
 
 #upload-area {
+    outline: 0px solid transparent;
     text-align: center;
     height: 700px;
     background: rgba(0, 0, 0, 0.1);
     border: 3px dashed #4ABEF9;
     margin-top: 15px;
+    max-width: 1000px;
+    max-height: 50%;
+    margin: auto;
+    cursor: default;
 }
 
 #upload-area.hover {
@@ -100,8 +106,14 @@ a { text-decoration: none; }
     pointer-events: none;
 }
 
+#upload-area img {
+    visibility: hidden;
+    width: 0px;
+}
+
 #progress-container {
     margin: auto;
+    max-width: 1000px;
 }
 
 
@@ -187,7 +199,6 @@ a { text-decoration: none; }
 }
 
 #image-view img {
-    /* max-width: 1000px; */
     border: 1px solid black;
 }
 
@@ -221,67 +232,33 @@ a { text-decoration: none; }
     font-size: 10px;
 }
 
-.btn.auth,
-.btn.auth:visited {
+.facebook.btn {
     position: relative;
-    display: inline-block;
-    /* padding: 7px 10px 3px 0px; */
-    background: #3b5998;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.btn.auth:hover,
-.btn.auth:focus,
-.btn.auth:active {
-    color: #222;
-    text-decoration: none;
-}
-
-.btn.auth:before {
-    float: left;
-    
-}
-
-.btn.auth::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-
-/* Facebook (extends .btn-auth)
-   ========================================================================== */
-
-.btn.facebook,
-.btn.facebook:visited {
     background: #3b5998;
     color: #fff;
     font-family: 'Oswald', sans-serif;
-    text-transform: uppercase;
-    padding-right: 10px;
-    padding-top: 5px;
+    font-size: 14px;
+    width: 125px;
+    height: 35px;
 }
 
-.btn.facebook:hover,
-.btn.facebook:focus {
-    color: #fff;
-    background-color: #3b5998;
-    
+.facebook.btn .text {
+    position: absolute;
+    top: 7px;
+    right: 12px;
 }
 
-.btn.facebook:active {
+.facebook.btn:active {
     background: #354f88;
 }
 
-/** Icon */
-.btn.facebook:before {
-    margin-top: -5px;
-    margin-right: 10px;
+.facebook.btn .icon {
+    background-image:  url('/../www/images/fb_icon.png');
+    background-repeat: no-repeat;
     background-color: #354f88;
-    padding: 5px 0px 2px 0px;
-    width: 35px;
-    /*content: url(https://dl.dropboxusercontent.com/u/54149043/CssDeck/fb-icon.png);    */
+    background-position: center center;
+    height: 35px;
+    width: 30px;    
 }
 
 .btn.logout {

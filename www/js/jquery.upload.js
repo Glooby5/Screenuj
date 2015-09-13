@@ -2,6 +2,7 @@
     var canvas, context, canvaso, contexto, canvasF, contextF;
     var tool;
     var code;
+    var token;
     
     function checkFile(file) {
         if (!file) {
@@ -13,7 +14,7 @@
             sweetAlert("Moc velké", "Velikost obrázku přesahuje povolenou velikost 10 MB!", "error");
             return false;
         }
-        
+        console.log(file.type);
         var types = ["image/png", "image/jpeg"];        
         if (types.indexOf(file.type) === -1) {
             sweetAlert("Nepodporováno!", "Vložený soubor není podporován.", "error");
@@ -54,51 +55,27 @@
     }
     
     function ev_canvas(ev) {
-        if (ev.layerX || ev.layerX == 0) { // Firefox
-            ev._x = ev.layerX;
-            ev._y = ev.layerY;
-        } else if (ev.offsetX || ev.offsetX == 0) { // Opera
-            ev._x = ev.offsetX;
-            ev._y = ev.offsetY;
-        }
+        if (tool) {
+            if (ev.layerX || ev.layerX == 0) { // Firefox
+                ev._x = ev.layerX;
+                ev._y = ev.layerY;
+            } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+                ev._x = ev.offsetX;
+                ev._y = ev.offsetY;
+            }
 
-        var func = tool[ev.type];
-        if (func) {
-            func(ev);
+            var func = tool[ev.type];
+            if (func) {
+                func(ev);
+            }
         }
     }
     
     var tools = {};
     
-    $(document).on('click', '.toolbox .item', function(e) {       
-       if ($(this).hasClass('pencil')) {
-           tool = new tools['pencil']();
-       } 
-       else if ($(this).hasClass('rectangle')) {
-           tool = new tools['rect']();
-       }
-       else if ($(this).hasClass('line')) {
-           tool = new tools['line']();
-       }
-       else if ($(this).hasClass('crop')) {
-           tool = new tools['crop']();
-       }
-       else if ($(this).hasClass('save')) {
-           UpdateImage();   
-           return;
-       }
-       else if ($(this).hasClass('view')) {
-           window.location.href = window.location.href + code;
-           return; 
-       }
-       
-       
-       $('.toolbox .item').removeClass('selected');
-       $(this).addClass('selected');
-    });
     
-    function img_update() {
-        
+    
+    function img_update() {        
         contexto.drawImage(canvas, 0, 0);
         contextF.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, canvasF.width, canvasF.height);
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -156,7 +133,7 @@
                 context.strokeStyle = "rgba(255,197,82,0.05)";
                 context.lineTo(ev._x, ev._y);
                 context.stroke();
-                 context.strokeStyle = "rgba(255,197,82,0.05)";
+                context.strokeStyle = "rgba(255,197,82,0.05)";
             }
         };
 
@@ -361,15 +338,10 @@
         return [w, h];
     }
     
-    function ShowImage(file) {
-        $("#upload-area").attr("id", "edit-container");
-        $("#edit-container").html('<canvas id="imageView" width="1000"  height="700"><p>hovnoooooooooooooooooooooo</p>');
-        
+    function ShowImage(file) {        
         var reader = new FileReader();
+        $("#upload-area").css('cursor', 'default');
         reader.onload = function(e) {
-            var canvas = document.getElementById('imageView');            
-            context = canvas.getContext('2d');
-
             var img = new Image();
             
             img.onload = function () {                            
@@ -378,7 +350,10 @@
                 w = dim[0];
                 h = dim[1];
                 
-                console.log("width: " + w + " height: " + h);
+                $("#upload-area").attr("id", "edit-container");
+                $("#edit-container").html('<canvas id="imageView"><p>hovnoooooooooooooooooooooo</p>');
+                var canvas = document.getElementById('imageView');            
+                context = canvas.getContext('2d');
                 
                 canvas.width = w;
                 canvas.height = h;
@@ -409,7 +384,6 @@
         xhr.upload.addEventListener("progress", function(e) {
             if (e.lengthComputable) {
                 var percentComplete = e.loaded / e.total * 100;
-                console.log(percentComplete);
                 $("#progress progress").attr('value', percentComplete);
                 $("#progress-bar").width(percentComplete + '%');
             }
@@ -438,12 +412,9 @@
         xhr.send(file);
     }
     
-    var token;
-    
     function UploadFile(file) {
         
         if (checkFile(file)) {
-            console.log("check file");
             var reader = new FileReader();
             reader.onload = function(e) {
                 var img = new Image();
@@ -453,6 +424,8 @@
                 if (size > 120000000) {
                     console.log("moc px");
                 } else {
+                    console.log(file);
+                    console.log(file.data);
                     sendFile(file);
                 }
             }            
@@ -488,6 +461,55 @@
         });
     }
     
+    function dataURItoBlob (dataURI) {
+        var byteString;
+        if (dataURI.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(dataURI.split(',')[1]);
+        else
+            byteString = unescape(dataURI.split(',')[1]);
+
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ab],{type: mimeString});
+    }
+    
+    var calls = 0;
+    
+    function waitforpastedata () {
+        calls++;
+        console.log("waiting" + calls);
+        img = $("#upload-area img");
+        if (img.length > 0) {
+            
+            file = dataURItoBlob(img[0].src);
+            $("#upload-area").attr('contenteditable', false);
+            UploadFile(file);
+        } else {
+            $("#upload-area").empty();
+            if (calls > 20) {
+                $("#upload-area").css('cursor', 'default');
+                calls = 0;
+                swal({
+                    title: "Timeout!",
+                    text: "Nepovedlo se načíst žádný obrázek.",
+                    type: "error"
+                });
+            } else {                        
+                that = {}
+                that.callself = function () {
+                        waitforpastedata()             
+                }
+                setTimeout(that.callself,20);
+            }
+        }
+    }
+    
     function FileDragHover(e) {
         e.stopPropagation();
         e.preventDefault();        
@@ -496,27 +518,60 @@
 
     function FileSelectHandler(e) {
         FileDragHover(e);
-
         var files = e.originalEvent.dataTransfer.files;
         UploadFile(files[0]);
     }
     
     function PasteEvent(e) {
-        var item = e.originalEvent.clipboardData.items[0];
-        UploadFile(item.getAsFile());
+        if (e && e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.items) {
+            var item = e.originalEvent.clipboardData.items[0];
+            UploadFile(item.getAsFile());
+        } else {
+            $("#upload-area").html("<p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>");
+            $("#upload-area img").hide();
+            $("#upload-area").css('cursor', 'wait');
+            waitforpastedata();
+        }
     }
+    
+    $(document).on('click', '.toolbox .item', function(e) {       
+       if ($(this).hasClass('pencil')) {
+           tool = new tools['pencil']();
+       } 
+       else if ($(this).hasClass('rectangle')) {
+           tool = new tools['rect']();
+       }
+       else if ($(this).hasClass('line')) {
+           tool = new tools['line']();
+       }
+       else if ($(this).hasClass('crop')) {
+           tool = new tools['crop']();
+       }
+       else if ($(this).hasClass('save')) {
+           UpdateImage();   
+           return;
+       }
+       else if ($(this).hasClass('view')) {
+           window.location.href = window.location.href + code;
+           return; 
+       }       
+       
+       $('.toolbox .item').removeClass('selected');
+       $(this).addClass('selected');
+    });
     
     $(document).on('click', '#save-btn', function(e) {
         e.preventDefault();
         UpdateImage();
-    });
-    
-    
+    });    
 
     $(document).ready(function() {
-        $(window).on("paste", PasteEvent);
+        $(document).on("paste", PasteEvent);
         $("#upload-area").on("dragover", FileDragHover);
         $("#upload-area").on("dragleave", FileDragHover);
         $("#upload-area").on("drop", FileSelectHandler);        
+        $("#upload-area").focus();
     });
 })();
+
+
