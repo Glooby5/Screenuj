@@ -170,7 +170,7 @@
             if (!w || !h) {
                 return;
             }
-
+            context.strokeStyle = "#000000";
             context.strokeRect(x, y, w, h);
         };
 
@@ -249,6 +249,8 @@
             if (!w || !h) {
                 return;
             }
+            
+            context.strokeStyle = color;
             context.strokeRect(x, y, w, h);
         };
 
@@ -277,7 +279,7 @@
             }
             
             context.clearRect(0, 0, canvas.width, canvas.height);
-
+            context.strokeStyle = color;
             context.beginPath();
             context.moveTo(tool.x0, tool.y0);
             context.lineTo(ev._x, ev._y);
@@ -567,6 +569,8 @@
         e.preventDefault();
         UpdateImage();
     });    
+    
+    $("#upload-area").keypress(function(e){ e.preventDefault() });
 
     $(document).ready(function() {
         $(document).on("paste", PasteEvent);
