@@ -1,3 +1,9 @@
+AuthUserFile /data/web/virtuals/106665/virtual/www/domains/screenuj.eu/.htpasswd
+AuthGroupFile /dev/null
+AuthName "Dev Screenuj.eu"
+AuthType Basic
+Require valid-user
+Order deny,allow
 RewriteEngine On
 RewriteRule ^$ www/ [L]
 RewriteRule (.*) www/$1 [L]

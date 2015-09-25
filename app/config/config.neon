@@ -2,6 +2,12 @@
 # WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
 # http://nette.org/security-warning
 #
+doctrine:
+	user: w106665_screen
+	password: BbW2JuwR
+	dbname: d106665_screen
+	host: wm93.wedos.net
+
 parameters:
 
 
@@ -22,7 +28,7 @@ session:
 services:
 	- App\Model\UserManager
 	router: App\RouterFactory::createRouter
-	imageStorage: Screenuj\Model\ImageStorage(%wwwDir%/uploads/images, /www/uploads/images)
+	imageStorage: Screenuj\Model\ImageStorage(%wwwDir%/uploads, /www/uploads)
 	- Screenuj\Model\HashManager
 	- Screenuj\Services\ImageService
 	- Screenuj\Services\UserService
