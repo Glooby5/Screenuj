@@ -2,12 +2,6 @@
 # WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
 # http://nette.org/security-warning
 #
-doctrine:
-	user: w106665_screen
-	password: BbW2JuwR
-	dbname: d106665_screen
-	host: wm93.wedos.net
-
 parameters:
 
 

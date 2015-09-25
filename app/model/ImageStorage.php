@@ -69,8 +69,14 @@ class ImageStorage extends Object
             if (!is_dir($this->dir . $dir)) mkdir($this->dir . $dir, 0777);
         }
         
+//        dump($this->dir);
+//        //dump($dir);
+//        dump($type);
+//        dump($user);
+//        die();
+        
         if (!is_dir($this->dir . $dir .'/thumbs'))
-            mkdir ($this->dir . $dir .'/thumbs', 0777);
+            mkdir($this->dir . $dir .'/thumbs', 0777);
         
         return $dir;
     }
@@ -85,7 +91,6 @@ class ImageStorage extends Object
     public function Save($filename, $data, $type, User $user = NULL)
     {
         $image = Image::fromString($data);
-
         $dir = $this->testFolder($type, ($user) ? $user->id : NULL);
         $name = md5($filename . ($user ? $user->email:NULL) . time()) .'.jpg';;
         $newFileName = $this->dir . $dir .'/'. $name;

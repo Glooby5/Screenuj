@@ -1,0 +1,53 @@
+/* COLORPICKER 1 EXAMPLE */
+#colorPicker
+{
+    position: relative;
+    clear: both;
+}
+
+#colorPicker .track {
+    background:     #EFEFEF url(/../www/images/text-color.png) no-repeat 50% 50%;
+    height:         150px;
+    width:          150px;
+    padding:        10px;
+    position:       absolute;
+    cursor:         crosshair;
+    float:          left;
+    left:           -71px;
+    top:            -71px;
+    display:        none;
+    border:         1px solid #ccc;
+    z-index:        10;
+    -webkit-border-radius: 150px;
+    -moz-border-radius: 150px;
+    border-radius: 150px;
+
+}
+
+#colorPicker .color {
+    display:        block;
+    position:       relative;
+    z-index:        11;
+    cursor: pointer;
+}
+
+#colorPicker .colorInner {
+    width:          35px;
+    height:         35px;
+}
+
+#colorPicker .dropdown {
+    list-style: none;
+    display: none;
+    width: 27px;
+    position: absolute;
+    top: 28px;
+    border: 1px solid #ccc;
+    left: 0;
+    z-index: 1000;
+}
+
+#colorPicker .dropdown li{
+    height: 25px;
+    cursor: pointer;
+}
