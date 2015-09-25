@@ -577,6 +577,7 @@
         var $box = $('#colorPicker');
         $box.tinycolorpicker();
         box = $box.data("plugin_tinycolorpicker");
+        box.setColor("#000000");
         
         $box.bind("change", function() {
             console.log("do something whhen a new color is set");
