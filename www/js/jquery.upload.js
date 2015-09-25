@@ -3,6 +3,8 @@
     var tool;
     var code;
     var token;
+    var box;
+    var color;
     
     function checkFile(file) {
         if (!file) {
@@ -71,25 +73,19 @@
         }
     }
     
-    var tools = {};
-    
-    
+    var tools = {};    
     
     function img_update() {        
         contexto.drawImage(canvas, 0, 0);
         contextF.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, canvasF.width, canvasF.height);
         context.clearRect(0, 0, canvas.width, canvas.height);
     }    
-
     
-
-
     tools.pencil = function () {
         var tool = this;
         this.started = false;
         
         context.lineWidth = 1;
-        context.strokeStyle = "red";
 
         this.mousedown = function (ev) {
             context.beginPath();
@@ -99,6 +95,7 @@
 
         this.mousemove = function (ev) {
             if (tool.started) {
+                context.strokeStyle = color;
                 context.lineTo(ev._x, ev._y);
                 context.stroke();
             }
@@ -526,9 +523,13 @@
     
     function PasteEvent(e) {
         if (e && e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.items) {
+            console.log("clipboard");
+            $("#upload-area").html("<p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>");
             var item = e.originalEvent.clipboardData.items[0];
             UploadFile(item.getAsFile());
+            
         } else {
+            console.log("paste to to block");
             $("#upload-area").html("<p>Vložte obrázek ze schránky pomocí ctrl+v<br>nebo ho sem přetáhněte</p>");
             $("#upload-area img").hide();
             $("#upload-area").css('cursor', 'wait');
@@ -573,6 +574,17 @@
         $("#upload-area").on("dragleave", FileDragHover);
         $("#upload-area").on("drop", FileSelectHandler);        
         $("#upload-area").focus();
+        var $box = $('#colorPicker');
+        $box.tinycolorpicker();
+        box = $box.data("plugin_tinycolorpicker");
+        box.setColor("#000000");
+        
+        $box.bind("change", function() {
+            console.log("do something whhen a new color is set");
+            console.log(box);
+            console.log(box.colorRGB);
+            color = box.colorHex;
+        });
     });
 })();
 

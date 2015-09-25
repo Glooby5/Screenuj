@@ -37,23 +37,29 @@
         
         return [w, h];
     }
+    
+    $(window).load(function() {
+        $("#image-view img").show();
+        $("#result-input").select();
+        $('#main').css('width', '100%');
+        image = $("#image-view img");
+        console.log(image);
+        res = calculateDimensions(image.width(), image.height());
+        console.log(res);
+        image.css('width', res[0]);
+        image.css('height', res[1]);
+    });
 
 $(document).ready(function() {
-    $("#result-input").select();
-    $('#main').css('width', '100%');
-    image = $("#image-view img");
-    res = calculateDimensions(image.width(), image.height());
-    image.css('width', res[0]);
-    image.css('height', res[1]);
     
-    $(window).resize(function() {
-    console.log("resize");
-    image = $("#image-view img");
-    console.log(image);
-    res = calculateDimensions(image.width(), image.height());
-    image.css('width', res[0]);
-    image.css('height', res[1]);
-});
+//    $(window).resize(function() {
+//    console.log("resize");
+//    image = $("#image-view img");
+//    console.log(image);
+//    res = calculateDimensions(image.width(), image.height());
+//    image.css('width', res[0]);
+//    image.css('height', res[1]);
+//});
 });
 
 

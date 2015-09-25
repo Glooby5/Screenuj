@@ -6,7 +6,14 @@
         var uploadHandle = {link Upload:NewSave};
     </script>
     <script src="{$basePath}/js/jquery.upload.js"></script>
+    <script src="{$basePath}/js/jquery.tinycolorpicker.min.js"></script>
 {/block}
+
+{block head}
+    {include parent}
+    <link rel="stylesheet" type="text/css" href="{$basePath}/css/tinycolorpicker.css">
+{/block}
+
 {block content}
     <div class="main-container">
         
@@ -20,6 +27,12 @@
                 <div class="item crop"></div>
                 <div class="item save"></div>
                 <div class="item view"></div>
+                <div id="colorPicker" class="item picker">
+                    <a class="color"><div class="colorInner"></div></a>
+                    <div class="track"></div>
+                    <ul class="dropdown"><li></li></ul>
+                    <input type="hidden" class="colorInput"/>
+                </div>
             </div>            
             
             <div id="upload-area" contentEditable="true">
@@ -28,12 +41,12 @@
         </div>
 
         <div id="progress-container"></div>
+        
+        
        
         <div id="messages">
         </div>
-    </div>
-
-    
+    </div>    
 {/block}
 
 
