@@ -159,7 +159,6 @@
             if (!tool.started) {
                 return;
             }
-
             var x = Math.min(ev._x, tool.x0),
                 y = Math.min(ev._y, tool.y0),
                 w = Math.abs(ev._x - tool.x0),
@@ -182,8 +181,11 @@
                     y = Math.min(ev._y, tool.y0),
                     w = Math.abs(ev._x - tool.x0),
                     h = Math.abs(ev._y - tool.y0);
-            
-                cropImage(x, y, w, h);                
+                    console.log(w + " " + h);
+                    
+                if (w > 100 && h > 100) {
+                   cropImage(x, y, w, h);        
+                }
                 context.clearRect(0, 0, canvas.width, canvas.height);              
             }
         };
