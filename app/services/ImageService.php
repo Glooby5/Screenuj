@@ -21,7 +21,7 @@ class ImageService extends BaseService
     public function getByUserID($user)
     {
         $query = $this->getEm()->createQueryBuilder()
-                ->select(['i'])
+                ->select(['i', 'l'])
                 ->from(Image::getClassName(), 'i')
                 ->leftJoin('i.link', 'l')
                 ->leftJoin('i.user', 'u')

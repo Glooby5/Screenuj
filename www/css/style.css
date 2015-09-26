@@ -216,14 +216,25 @@ a { text-decoration: none; }
     width: 180px;
     height: 180px;
     margin: 0px 10px 30px 10px;
+    position: relative;
 }
 
-.gallery .thumb img{
+.gallery .thumb img {
     /* margin: auto; */
     width: 180px;
     height: 180px;
     cursor: zoom-in;
     border: 1px solid black;
+}
+
+.gallery .thumb .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    cursor: pointer;
 }
 
 .main-container.gallery .thumb p {

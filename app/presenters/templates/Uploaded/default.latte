@@ -2,15 +2,66 @@
 <div class="main-container gallery">
     {if count($images) > 0}
         {foreach $images as $image}
-            <div class="thumb">
-                <a href="{$baseUri}/{$image->getLink()[0]->code}">
-                    <img src="/www/uploads/{$image->folder}/thumbs/{$image->name}" />
-                </a>
+            {ifset $image->link}
+                <div class="thumb">
+                    <div class="delete-btn" code="{$image->link->code}"></div>
+                    {dump $image->getLink()}
+                    <a href="{$baseUri}/{$image->link->code}">
+                        <img src="/www/uploads/{$image->folder}/thumbs/{$image->name}" />
+                    </a>
                     <p>{$image->uploaded|date:'%d.%m.%Y %H:%M:%S'}</p>
-            </div>
+                </div>
+            {/ifset}
         {/foreach}
     {else}
         <p>Žádné obrázky.</p>
     {/if}
 </div>
+    
+
 {/block}
+
+{block scripts}
+    {include parent}
+    <script type="text/javascript">
+        $(document).on('click', '.delete-btn', function(e) {   
+            console.log($(this).attr('code'));
+            console.log($(this).parent());
+            var thumb = $(this).parent();
+            var code = $(this).attr('code');
+            swal({   
+                    title: "Opravdu?",  
+                    text: "Po smazání obrázek nelze obnovit!",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Smazat!",   
+                    cancelButtonText: "Zrušit",   
+                    closeOnConfirm: true,   
+                    closeOnCancel: true 
+                }, 
+                function(){   
+                    $.nette.ajax({
+                        type: 'GET',
+                        url: {link Uploaded: 'do' => 'delete'},
+                        data: {
+                            code: code,
+                        }
+                    }).done(function (payload) {
+                        if (payload.status == 'success') {
+                            thumb.fadeOut("fast");
+                            return;
+                        } else {
+                            swal({
+                                title: "Chyba!",
+                                text: payload.message,
+                                type: "error"
+                            });
+                        }                        
+                    });
+                }
+            );
+        });
+    </script>
+{/block}
+

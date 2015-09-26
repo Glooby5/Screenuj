@@ -2,18 +2,23 @@
 namespace App\Presenters;
 
 use Nette\Application\BadRequestException;
+use Nette\Application\Responses\JsonResponse;
+use Screenuj\Model\ImageStorage;
 use Screenuj\Services\ImageService;
-use function dump;
 
 class UploadedPresenter extends BasePresenter
 {    
     /** @var ImageService */
     public $imageService;
     
-    public function __construct(ImageService $imageService)
+    /** @var ImageStorage */
+    public $imageStorage;
+    
+    public function __construct(ImageService $imageService, ImageStorage $imageStorage)
     {
         parent::__construct();
         $this->imageService = $imageService;
+        $this->imageStorage = $imageStorage;
     }
     
     public function renderDefault()
@@ -29,4 +34,20 @@ class UploadedPresenter extends BasePresenter
         }
     }
 
+    public function handleDelete($code)
+    {
+        if (!$this->user->isLoggedIn())
+            $this->sendResponse(new JsonResponse(['status' => 'error', 'type' => 'unauthorized', 'message' => 'Nepřihlášený uživatel']));
+        
+        try
+        {
+            $this->imageStorage->Delete($code, $this->user->id);
+        } 
+        catch (\Exception $ex) 
+        {
+            $this->sendResponse(new JsonResponse(['status' => 'error', 'type' => 'unknown', 'message' => $ex->getMessage()]));
+        }
+
+        $this->sendResponse(new JsonResponse(['status' => 'success']));        
+    }
 }
