@@ -5,7 +5,6 @@
             {ifset $image->link}
                 <div class="thumb">
                     <div class="delete-btn" code="{$image->link->code}"></div>
-                    {dump $image->getLink()}
                     <a href="{$baseUri}/{$image->link->code}">
                         <img src="/www/uploads/{$image->folder}/thumbs/{$image->name}" />
                     </a>

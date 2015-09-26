@@ -339,6 +339,8 @@
         return [w, h];
     }
     
+    var oldImage;
+    
     function ShowImage(file) {        
         var reader = new FileReader();
         $("#upload-area").css('cursor', 'default');
@@ -371,7 +373,9 @@
                 
                 canvasF.width = img.width;
                 canvasF.height = img.height;
-                contextF.drawImage(img, 0, 0);                
+                contextF.drawImage(img, 0, 0);   
+                
+                oldImage = img;
             }
             
             img.src = e.target.result;
@@ -421,18 +425,26 @@
                 var img = new Image();
                 img.src = e.target.result;
                 var size = img.width * img.width * 3 * 1.6;
-
+                
                 if (size > 120000000) {
                     console.log("moc px");
                 } else {
-                    console.log(file);
-                    console.log(file.data);
                     sendFile(file);
                 }
             }            
             reader.readAsDataURL(file);
         }
     }    
+    
+    function CleanImage() {
+        console.log('clean');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        contexto.clearRect(0, 0, canvaso.width, canvaso.height);
+        context.drawImage(oldImage, 0, 0, oldImage.width, oldImage.height, // source rectangle
+                        0, 0, canvaso.width, canvaso.height);
+        contextF.drawImage(oldImage, 0, 0, oldImage.width, oldImage.height, // source rectangle
+                        0, 0, canvasF.width, canvasF.height);
+    }
     
     function UpdateImage() {
         $.nette.ajax({
@@ -562,6 +574,13 @@
            window.location.href = window.location.href + code;
            return; 
        }       
+       else if ($(this).hasClass('picker')) {
+           return; 
+       }   
+       else if ($(this).hasClass('rubber')) {
+           CleanImage();   
+           return;
+       }
        
        $('.toolbox .item').removeClass('selected');
        $(this).addClass('selected');
@@ -583,13 +602,19 @@
         var $box = $('#colorPicker');
         $box.tinycolorpicker();
         box = $box.data("plugin_tinycolorpicker");
-        box.setColor("#000000");
-        
+        box.setColor('rgb(3, 145, 206)');
+        color = box.colorHex;
+        var pencil = $('.toolbox .pencil');
         $box.bind("change", function() {
-            console.log("do something whhen a new color is set");
-            console.log(box);
-            console.log(box.colorRGB);
+
             color = box.colorHex;
+
+            if (tool == null) {
+                tool = new tools['pencil']();
+                
+                pencil.addClass('selected');
+            }
+                
         });
     });
 })();

@@ -189,6 +189,10 @@ a { text-decoration: none; }
     background-image: url('/../www/images/view.png');
 }
 
+.toolbox .rubber {
+    background-image: url('/../www/images/rubber2.png');
+}
+
 .toolbox .item:active {
     background-color: black;
 }
