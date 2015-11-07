@@ -69,12 +69,6 @@ class ImageStorage extends Object
             if (!is_dir($this->dir . $dir)) mkdir($this->dir . $dir, 0777);
         }
         
-//        dump($this->dir);
-//        //dump($dir);
-//        dump($type);
-//        dump($user);
-//        die();
-        
         if (!is_dir($this->dir . $dir .'/thumbs'))
             mkdir($this->dir . $dir .'/thumbs', 0777);
         
@@ -137,5 +131,32 @@ class ImageStorage extends Object
         $path = self::$sFolder . $image->folder . '/thumbs/' . $image->name;
         
         return $path;
+    }
+    
+    public function Delete($code, $userId)
+    {
+        $image = $this->imageService->findOneBy(['link.code' => $code]);
+        
+        if (!$image)
+            throw new \Exception("Neexistující obrázek.");
+        
+        if ($image->user->id != $userId)
+            throw new \Exception("Uživatel není majitel obrázku.");
+        
+        if (file_exists($this->dir . '/' . $image->folder . '/' . $image->name))
+            unlink($this->dir . '/' . $image->folder . '/' . $image->name);
+        if (file_exists($this->dir . '/' . $image->folder . '/thumbs/' . $image->name))
+            unlink($this->dir . '/' . $image->folder . '/thumbs/' . $image->name);
+        
+        
+        
+        $code = $this->linkService->findOneBy(['code' => $code]);        
+        if ($code)
+            $this->linkService->getEm()->remove($code);     
+        
+        $this->imageService->getEm()->remove($image);
+        $this->imageService->flush();
+                
+        return true;       
     }
 }

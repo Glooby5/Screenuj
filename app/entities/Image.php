@@ -39,7 +39,7 @@ class Image extends \Kdyby\Doctrine\Entities\BaseEntity
     
     /**
      * @var Link
-     * @ORM\OneToMany(targetEntity="Link", mappedBy="image")
+     * @ORM\OneToOne(targetEntity="Link", mappedBy="image")
      */
     public $link;
     

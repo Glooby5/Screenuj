@@ -31,6 +31,12 @@ class BaseService
         $this->em->persist($entity);
         $this->em->flush();
     }
+    
+    public function delete($entity)
+    {
+        $this->em->remove($entity);
+        $this->flush();
+    }
 
     /**
      * @return \Kdyby\Doctrine\EntityDao

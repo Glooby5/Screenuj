@@ -189,6 +189,10 @@ a { text-decoration: none; }
     background-image: url('/../www/images/view.png');
 }
 
+.toolbox .rubber {
+    background-image: url('/../www/images/rubber2.png');
+}
+
 .toolbox .item:active {
     background-color: black;
 }
@@ -216,14 +220,27 @@ a { text-decoration: none; }
     width: 180px;
     height: 180px;
     margin: 0px 10px 30px 10px;
+    position: relative;
 }
 
-.gallery .thumb img{
+.gallery .thumb img {
     /* margin: auto; */
     width: 180px;
     height: 180px;
     cursor: zoom-in;
     border: 1px solid black;
+}
+
+.gallery .thumb .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-image: url('/../www/images/cancel45.png');
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .main-container.gallery .thumb p {
