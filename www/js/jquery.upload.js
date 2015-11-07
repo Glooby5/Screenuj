@@ -4,7 +4,7 @@
     var code;
     var token;
     var box;
-    var color;
+     var color;
     
     function checkFile(file) {
         if (!file) {
