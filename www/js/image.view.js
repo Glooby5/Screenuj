@@ -35,7 +35,7 @@
             }
         }
         
-        return [w, h];
+        return [Math.round(w), Math.round(h)];
     }
     
     $(window).load(function() {
