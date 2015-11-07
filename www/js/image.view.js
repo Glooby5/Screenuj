@@ -46,8 +46,8 @@
         console.log(image);
         res = calculateDimensions(image.width(), image.height());
         console.log(res);
-        image.css('width', res[0]);
-        image.css('height', res[1]);
+        image.css('width', Math.round(res[0]));
+        image.css('height', Math.round(res[1]));
     });
 
 $(document).ready(function() {
