@@ -4,7 +4,7 @@
     var code;
     var token;
     var box;
-    var color;
+     var color;
     
     function checkFile(file) {
         if (!file) {
@@ -336,7 +336,7 @@
             }
         }
         
-        return [w, h];
+        return [Math.round(w), Math.round(h)];
     }
     
     var oldImage;
@@ -350,8 +350,8 @@
             img.onload = function () {                            
                 var w, h;
                 dim = calculateDimensions(img.width, img.height);
-                w = dim[0];
-                h = dim[1];
+                w = Math.round(dim[0]);
+                h = Math.round(dim[1]);
                 
                 $("#upload-area").attr("id", "edit-container");
                 $("#edit-container").html('<canvas id="imageView"><p>hovnoooooooooooooooooooooo</p>');
